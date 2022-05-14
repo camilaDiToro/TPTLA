@@ -1,0 +1,10 @@
+a.lout
+lex.yy.c
+y.tab.c
+.vscode
+temp.c
+main
+program
+*.dSYM
+.idea
+out.html
