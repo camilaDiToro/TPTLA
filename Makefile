@@ -11,11 +11,11 @@ all: parser
 parser:
 	lex $(SRC_FOLDER)/lang.l
 	yacc -d $(SRC_FOLDER)/lang.y
-	$(CC) $(CCFLAGS) $(SRC_FOLDER)/symbolTable.c $(SRC_FOLDER)/exp-to-ast.c $(SRC_FOLDER)/ast-to-html.c lex.yy.c y.tab.c $(SRC_FOLDER)/main.c $(YLFLAGS) -o main
+	$(CC) $(CCFLAGS) $(SRC_FOLDER)/symbolTable.c $(SRC_FOLDER)/exp-to-ast.c $(SRC_FOLDER)/ast-to-html.c lex.yy.c y.tab.c $(SRC_FOLDER)/main.c $(YLFLAGS) -o jtoh
 	rm -rf $(OBJ)
 
 clean: 
-	rm -rf $(PARSER_OBJ) $(PROGRAM_OBJ) $(OBJ) main
+	rm -rf $(PARSER_OBJ) $(PROGRAM_OBJ) $(OBJ) jtoh
 
 
 PHONY = all clean
