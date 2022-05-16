@@ -6,12 +6,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int yyparse(ExpNode **program);
+int yyparse(ExpResultNode **program);
 extern int yylineno;
 
 extern FILE *yyin;
 FILE *out;
-ExpNode *program;
+ExpResultNode *program;
 char *out_file = "program";
 
 extern char *optarg;
@@ -97,6 +97,6 @@ int main(int argc, char **argv)
     printf("\nEnd\n");
 }
 
-void yyerror(ExpNode **param, char * err_msg) {
+void yyerror(ExpResultNode **param, char * err_msg) {
     printf("%s at line %d\n", err_msg, yylineno);
 }

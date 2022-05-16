@@ -4,6 +4,10 @@
 #include <string.h>
 
 
+/*************************************************************************************
+**                       NODE BUILDING
+**************************************************************************************/
+
 ExpNode * newExpNode(getModeFunction gm, evaluateIntegerFunction ei, evaluateStringFunction es, int ivalue, char* cvalue, ExpNode* left, ExpNode * right){
     ExpNode * newNode = malloc(sizeof(ExpNode));
     if(newNode == NULL){
@@ -19,6 +23,10 @@ ExpNode * newExpNode(getModeFunction gm, evaluateIntegerFunction ei, evaluateStr
     newNode->right = right;
 	return newNode;
 }
+
+/*************************************************************************************
+**                       TYPE DEFINITION
+**************************************************************************************/
 
 SymbolType integerMode(SymbolTableP symbolTable, struct ExpNode * expNode){
     return INT;
@@ -39,8 +47,39 @@ SymbolType orMode(SymbolTableP symbolTable, struct ExpNode * expNode){
     return expNode->left->getMode(symbolTable, expNode->left) | expNode->right->getMode(symbolTable, expNode->right);
 }
 
+/*************************************************************************************
+**                       EXPRESSION RESULT
+**************************************************************************************/
 
-//Expresions
+char * evaluate(SymbolTableP symbolTable, struct ExpResultNode * expNode){
+    ExpNode * e = expNode->exp;
+    if(e->getMode(symbolTable, e) == STRING){
+        expNode->cvalue = e->evaluateString(symbolTable, e);
+    }else{
+        int ans = e->evaluateInteger(symbolTable, e);
+        int length = snprintf( NULL, 0, "%d", ans );
+        expNode->cvalue = realloc( expNode->cvalue, length + 1 );
+        snprintf(expNode->cvalue, length + 1, "%d", ans );
+    }
+    return expNode->cvalue;
+}
+    
+
+ExpResultNode * ExpressionResultExpAction(ExpNode * exp){
+    ExpResultNode * newNode = calloc(1,sizeof(ExpNode));
+    if(newNode == NULL){
+        printf("Error while trying to allocate memory \n");
+        return NULL;
+    }
+    newNode->evaluate = &evaluate;
+    newNode->exp = exp;
+	return newNode;
+}
+
+
+/*************************************************************************************
+**                       EXPRESSIONS
+**************************************************************************************/
 
 int addIntegers(SymbolTableP symbolTable, ExpNode * expNode){
     return expNode->left->evaluateInteger(symbolTable, expNode->left) + expNode->right->evaluateInteger(symbolTable, expNode->right);
@@ -61,6 +100,11 @@ ExpNode* AdditionExpressionGrammarAction(ExpNode* exp1, ExpNode* exp2){
     return newExpNode(&orMode,&addIntegers,&concatStrigns, -1, NULL, exp1, exp2);
 }
 
+
+/*************************************************************************************
+**                       FACTORS
+**************************************************************************************/
+
 ExpNode* FactorExpressionExpAction(ExpNode* factor){
     printf("FactorExpressionExpAction \n");
     return factor;
@@ -77,7 +121,9 @@ ExpNode* VariableFactorGrammarAction(ExpNode * expNode){
 	return expNode;
 }
 
-// Variables
+/*************************************************************************************
+**                      VARIABLES
+**************************************************************************************/
 
 char * returnStringVariable(SymbolTableP symbolTable, ExpNode * expNode){
     SymbolEntryP entry = getEntryFromTable(symbolTable, expNode->cvalue);
@@ -106,7 +152,9 @@ ExpNode * VariableExpAction(char * varName){
 }
 
 
-// Constants
+/*************************************************************************************
+**                      CONSTANTS
+**************************************************************************************/
 int returnIntegerValue(SymbolTableP symbolTable, ExpNode * expNode){
     return expNode->ivalue;
 }
@@ -126,7 +174,7 @@ ExpNode * IntegerConstantExpAction(const int value) {
 }
 
 
-ExpNode * ProgramGrammarAction(ExpNode ** program, ExpNode * expNode) {
+ExpResultNode * ProgramGrammarAction(ExpResultNode ** program, ExpResultNode * expNode) {
     *program = expNode;
     return expNode;
 }

@@ -10,9 +10,9 @@
 #define P(...) fprintf(output, ##__VA_ARGS__);
 FILE *output;
 
-void yyerror(ExpNode **program, char *s);
+void yyerror(ExpResultNode **program, char *s);
 
-void tree_to_html(ExpNode *program, FILE *file) {
+void tree_to_html(ExpResultNode *program, FILE *file) {
 
     SymbolTable * table = newEmptySymbolTable(); 
     SymbolEntry * s1 = newSymbol("i", "hola", STRING); 
@@ -30,9 +30,5 @@ void tree_to_html(ExpNode *program, FILE *file) {
     table = newScope(table); 
 
     output = file;
-    if(program->getMode(table, program) == STRING){
-        P("%s",program->evaluateString(table, program));
-    }else{ // INTEGER
-        P("%d",program->evaluateInteger(table, program));
-    }
+    P("%s",program->evaluate(table, program));
 }

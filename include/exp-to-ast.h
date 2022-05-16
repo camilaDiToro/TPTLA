@@ -20,7 +20,14 @@ typedef SymbolType  (*getModeFunction)(SymbolTableP symbolTable, struct ExpNode 
 typedef int         (*evaluateIntegerFunction)(SymbolTableP symbolTable, struct ExpNode * expNode);
 typedef char*       (*evaluateStringFunction)(SymbolTableP symbolTable, struct ExpNode * expNode);
 
+typedef struct ExpResultNode{
+    char* (*evaluate)(SymbolTableP symbolTable, struct ExpResultNode * expNode);
+    char* cvalue;
+    struct ExpNode * exp;
+}ExpResultNode;
+
 //Expresions
+ExpResultNode * ExpressionResultExpAction(ExpNode * exp);
 ExpNode* AdditionExpressionGrammarAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* FactorExpressionExpAction(ExpNode* factor);
 
@@ -38,6 +45,6 @@ ExpNode* IntegerConstantExpAction(int value);
 
 
 //Program, this might be en another .c
-ExpNode * ProgramGrammarAction(ExpNode ** program, ExpNode * expNode);
+ExpResultNode * ProgramGrammarAction(ExpResultNode ** program, ExpResultNode * expNode);
 
 #endif

@@ -7,7 +7,7 @@
 // Extern prototypes
 
 extern int yylex();
-void yyerror(ExpNode ** program, char *s);
+void yyerror(ExpResultNode ** program, char *s);
 
 extern FILE * out;
 
@@ -17,10 +17,11 @@ extern FILE * out;
     char string[1024];
     int integer;
     struct ExpNode * expNode;
-    struct ExpNode * list;
+    struct ExpResultNode * expResultNode;
 }
 
-%type <expNode> constant factor program variable expression
+%type <expNode> constant factor variable expression
+%type <expResultNode> expression_result program
 
 // IDs de los tokens generados desde Flex:
 %token ADD
@@ -75,10 +76,19 @@ extern FILE * out;
 %left ADD SUB
 %left MUL DIV
 
-%parse-param {ExpNode ** program}
+%parse-param {ExpResultNode ** program}
 
 %%
-program: QUOTE START_MATH expression END_MATH QUOTE             { $$ = ProgramGrammarAction(program, $3);}
+program: QUOTE expression_result QUOTE             				{ $$ = ProgramGrammarAction(program, $2);}
+
+
+
+/************************************************************************************************************
+**                                                MATH EXPRESSIONS
+*************************************************************************************************************/
+
+expression_result:	START_MATH expression END_MATH      		{ $$ = ExpressionResultExpAction($2); }
+	;
 
 expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
 	| factor													{ $$ = FactorExpressionExpAction($1); }

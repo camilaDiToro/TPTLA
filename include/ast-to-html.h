@@ -4,6 +4,6 @@
 #include <stdio.h>
 
 // From AST tree to HTML
-void tree_to_html(ExpNode *program, FILE *file);
+void tree_to_html(ExpResultNode *program, FILE *file);
 
 #endif
