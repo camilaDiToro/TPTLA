@@ -12,12 +12,27 @@ FILE *output;
 
 void yyerror(ExpNode **program, char *s);
 
-void tree_to_html(ExpNode *program, FILE *file)
-{
+void tree_to_html(ExpNode *program, FILE *file) {
+
+    SymbolTable * table = newEmptySymbolTable(); 
+    SymbolEntry * s1 = newSymbol("i", "hola", STRING); 
+    SymbolEntry * s2 = newSymbol("s", "122", INT); 
+    SymbolEntry * s3 = newSymbol("j", "this is a string test", STRING); 
+    SymbolEntry * s4 = newSymbol("t", "TEST", STRING); 
+    SymbolEntry * s5 = newSymbol("p", "BYE", STRING); 
+
+    addSymbolToTable(table, s1); 
+    addSymbolToTable(table, s2); 
+    addSymbolToTable(table, s3); 
+    addSymbolToTable(table, s4); 
+    addSymbolToTable(table, s5); 
+
+    table = newScope(table); 
+
     output = file;
-    if(program->mode == STRING_MODE){
-        P("%s",program->evaluateString(NULL, program));
-    }else{ // INTEGER_MODE
-        P("%d",program->evaluateInteger(NULL, program));
+    if(program->getMode(table, program) == STRING){
+        P("%s",program->evaluateString(table, program));
+    }else{ // INTEGER
+        P("%d",program->evaluateInteger(table, program));
     }
 }

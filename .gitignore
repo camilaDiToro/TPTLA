@@ -3,7 +3,7 @@ lex.yy.c
 y.tab.c
 .vscode
 temp.c
-main
+jtoh
 program
 *.dSYM
 .idea

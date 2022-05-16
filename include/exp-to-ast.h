@@ -6,10 +6,8 @@
 
 #include "symbolTable.h"
 
-typedef enum{INTEGER_MODE = 0, STRING_MODE = 1} ExpressionMode;
-
 typedef struct ExpNode{
-    ExpressionMode mode;
+    SymbolType (*getMode)(SymbolTableP symbolTable, struct ExpNode * expNode);
     int   (*evaluateInteger)(SymbolTableP symbolTable, struct ExpNode * expNode);
     char* (*evaluateString)(SymbolTableP symbolTable, struct ExpNode * expNode);
     int ivalue;
@@ -18,6 +16,9 @@ typedef struct ExpNode{
     struct ExpNode * right;
 }ExpNode;
 
+typedef SymbolType  (*getModeFunction)(SymbolTableP symbolTable, struct ExpNode * expNode);
+typedef int         (*evaluateIntegerFunction)(SymbolTableP symbolTable, struct ExpNode * expNode);
+typedef char*       (*evaluateStringFunction)(SymbolTableP symbolTable, struct ExpNode * expNode);
 
 //Expresions
 ExpNode* AdditionExpressionGrammarAction(ExpNode* exp1, ExpNode* exp2);

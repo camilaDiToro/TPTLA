@@ -1,35 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h> 
 #include "./include/symbolTable.h"
 
-typedef enum SymbolType {
-    STRING, 
-    INT
-} SymbolType; 
-
-typedef struct SymbolEntry {
-    char * key; 
-    char * value;
-    SymbolType type; 
-    struct SymbolEntry * next; 
-} SymbolEntry; 
-
-typedef struct SymbolTable {
-    SymbolEntry * top; 
-    struct SymbolTable * previousTable; 
-} SymbolTable; 
-
-SymbolEntry * newSymbol(char * name, char * value, SymbolType type); 
-void printSymbolEntry(SymbolEntry * entry); 
-void printSymbolEntryList(SymbolEntry * entry); 
-SymbolEntry * getSymbolWithKey(SymbolEntry * entry, char * key); 
-
-SymbolTable * newScope(SymbolTable * previousTable); 
-SymbolTable * newEmptySymbolTable(); 
-void printSymbolTable(SymbolTable * table);
-void addSymbolToTable(SymbolTable * table, SymbolEntry * entry); 
-SymbolEntry * getEntryFromTable(SymbolTable * table, char * key); 
 
 // Pure, simple, symbol manipulation
 

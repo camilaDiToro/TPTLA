@@ -44,7 +44,7 @@ whitespace		[ \f\n\r\t\v]
 <MATH>"-"									{ return SUB; }
 <MATH>"*"									{ return MUL; }
 <MATH>"/"									{ return DIV; }
-<MATH>{alpha}{alphanumeric}*                { return VAR; }
+<MATH>{alpha}{alphanumeric}*                { strcpy(yylval.string,yytext); return VAR; }
 
 <MATH>"=="									{ return EQ; }
 <MATH>"!="									{ return NEQ; }

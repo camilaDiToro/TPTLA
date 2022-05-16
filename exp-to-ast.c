@@ -4,6 +4,42 @@
 #include <string.h>
 
 
+ExpNode * newExpNode(getModeFunction gm, evaluateIntegerFunction ei, evaluateStringFunction es, int ivalue, char* cvalue, ExpNode* left, ExpNode * right){
+    ExpNode * newNode = malloc(sizeof(ExpNode));
+    if(newNode == NULL){
+        printf("Error while trying to allocate memory \n");
+        return NULL;
+    }
+    newNode->getMode = gm;
+    newNode->evaluateInteger = ei;
+    newNode->evaluateString = es;
+    newNode->ivalue = ivalue;
+    newNode->cvalue = cvalue;
+    newNode->left = left;
+    newNode->right = right;
+	return newNode;
+}
+
+SymbolType integerMode(SymbolTableP symbolTable, struct ExpNode * expNode){
+    return INT;
+}
+
+SymbolType stringMode(SymbolTableP symbolTable, struct ExpNode * expNode){
+    return STRING;
+}
+SymbolType varMode(SymbolTableP symbolTable, struct ExpNode * expNode){
+    SymbolEntryP entry = getEntryFromTable(symbolTable, expNode->cvalue);
+    if (entry == NULL) // No estaba definida la variable a la hora de consumirla 
+        return -1; 
+
+    return entry->type;
+}
+
+SymbolType orMode(SymbolTableP symbolTable, struct ExpNode * expNode){
+    return expNode->left->getMode(symbolTable, expNode->left) | expNode->right->getMode(symbolTable, expNode->right);
+}
+
+
 //Expresions
 
 int addIntegers(SymbolTableP symbolTable, ExpNode * expNode){
@@ -22,17 +58,7 @@ char * concatStrigns(SymbolTableP symbolTable, ExpNode * expNode){
 
 ExpNode* AdditionExpressionGrammarAction(ExpNode* exp1, ExpNode* exp2){
     printf("AdditionExpressionGrammarAction \n");
-    ExpNode * newNode = calloc(1,sizeof(ExpNode));
-    if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
-    }
-    newNode->mode = exp1->mode | exp2->mode;
-    newNode->evaluateInteger = &addIntegers;
-    newNode->evaluateString = &concatStrigns;
-    newNode->left = exp1;
-    newNode->right = exp2;
-	return newNode;
+    return newExpNode(&orMode,&addIntegers,&concatStrigns, -1, NULL, exp1, exp2);
 }
 
 ExpNode* FactorExpressionExpAction(ExpNode* factor){
@@ -42,54 +68,41 @@ ExpNode* FactorExpressionExpAction(ExpNode* factor){
 
 // Factors
 ExpNode * ConstantFactorExpAction(ExpNode * expNode) {
-    printf("ConstantFactorExpAction(%d) \n", expNode->evaluateInteger(NULL, expNode));
+    printf("ConstantFactorExpAction() \n");
 	return expNode;
 }
 
 ExpNode* VariableFactorGrammarAction(ExpNode * expNode){
-    printf("VariableFactorGrammarAction(%s) \n", expNode->evaluateString(NULL, expNode));
+    printf("VariableFactorGrammarAction() \n");
 	return expNode;
 }
 
 // Variables
 
-char * returnVariable(SymbolTableP symbolTable, ExpNode * expNode){
-    // Look up in the table the name of the variable and return its value
-     char * mockReturn = malloc(strlen("varsimple")+1);
-     strcpy(mockReturn, "varsimple");
-     return mockReturn;
+char * returnStringVariable(SymbolTableP symbolTable, ExpNode * expNode){
+    SymbolEntryP entry = getEntryFromTable(symbolTable, expNode->cvalue);
+    if (entry == NULL){
+        return -1; 
+    } // No estaba definida la variable a la hora de consumirla 
+    return entry->value;
+}
+
+int returnIntegerVariable(SymbolTableP symbolTable, ExpNode * expNode){
+    return atoi(returnStringVariable(symbolTable, expNode));
 }
 
 ExpNode * VariableSubscriptExpAction(char * varName, int index){
-    printf("VariableSubscriptExpAction(%s) \n", varName);
-    ExpNode * newNode = calloc(1,sizeof(ExpNode));
-    if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
-    }
-    //Variables are now trated as strings, check how to manage the integer case
-    newNode->mode = STRING_MODE;
-    newNode->evaluateString = &returnVariable;
-    newNode->ivalue = -1;
-    newNode->cvalue = malloc(strlen(varName) + 1);
-    strcpy(newNode->cvalue, varName);
-	return newNode;
+    printf("VariableSubscriptExpAction(%s[%d]) \n", varName, index);
+    char * cvalue = malloc(strlen(varName) + 1);
+    strcpy(cvalue, varName);
+	return newExpNode(&varMode,&returnIntegerVariable,&returnStringVariable, index, cvalue, NULL, NULL);
 }
 
 ExpNode * VariableExpAction(char * varName){
     printf("VariableExpAction(%s) \n", varName);
-    ExpNode * newNode = calloc(1,sizeof(ExpNode));
-    if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
-    }
-    //Variables are now trated as strings, check how to manage the integer case
-    newNode->mode = STRING_MODE;
-    newNode->evaluateString = &returnVariable;
-    newNode->ivalue = -1;
-    newNode->cvalue = malloc(strlen(varName) + 1);
-    strcpy(newNode->cvalue, varName);
-	return newNode;
+    char * cvalue = malloc(strlen(varName) + 1);
+    strcpy(cvalue, varName);
+	return newExpNode(&varMode,&returnIntegerVariable,&returnStringVariable, -1, cvalue, NULL, NULL);
 }
 
 
@@ -109,17 +122,9 @@ char* returnIntegerAsString(SymbolTableP symbolTable, ExpNode * expNode){
 
 ExpNode * IntegerConstantExpAction(const int value) {
     printf("IntegerConstantGrammarAction(%d) \n", value);
-    ExpNode * newNode = calloc(1,sizeof(ExpNode));
-    if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
-    }
-    newNode->mode = INTEGER_MODE;
-    newNode->evaluateInteger = &returnIntegerValue;
-    newNode->evaluateString = &returnIntegerAsString;
-    newNode->ivalue = value;
-	return newNode;
+    return newExpNode(&integerMode,&returnIntegerValue, &returnIntegerAsString, value, NULL, NULL, NULL );
 }
+
 
 ExpNode * ProgramGrammarAction(ExpNode ** program, ExpNode * expNode) {
     *program = expNode;
