@@ -1,17 +1,17 @@
-#include "include/exp-to-ast.h"
-#include "include/ast-to-html.h"
+#include "include/expToAst.h"
+#include "include/astToHTML.h"
 #include <getopt.h>
 
 #include "y.tab.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-int yyparse(ExpResultNode **program);
+int yyparse(GenericNode **program);
 extern int yylineno;
 
 extern FILE *yyin;
 FILE *out;
-ExpResultNode *program;
+GenericNode *program;
 char *out_file = "program";
 
 extern char *optarg;
@@ -97,6 +97,6 @@ int main(int argc, char **argv)
     printf("\nEnd\n");
 }
 
-void yyerror(ExpResultNode **param, char * err_msg) {
+void yyerror(GenericNode **param, char * err_msg) {
     printf("%s at line %d\n", err_msg, yylineno);
 }

@@ -26,6 +26,8 @@ typedef struct ExpResultNode{
     struct ExpNode * exp;
 }ExpResultNode;
 
+typedef char*       (*evaluateFunction)(SymbolTableP symbolTable, struct ExpResultNode * expNode);
+
 //Expresions
 ExpResultNode * ExpressionResultExpAction(ExpNode * exp);
 ExpNode* AdditionExpressionGrammarAction(ExpNode* exp1, ExpNode* exp2);
@@ -42,9 +44,7 @@ ExpNode* VariableExpAction(char * varName);
 //Integer
 ExpNode* IntegerConstantExpAction(int value);
 
-
-
-//Program, this might be en another .c
-ExpResultNode * ProgramGrammarAction(ExpResultNode ** program, ExpResultNode * expNode);
+//String constant
+ExpResultNode * StringConstantExpAction(char * string);
 
 #endif

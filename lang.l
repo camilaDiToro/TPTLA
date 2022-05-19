@@ -1,5 +1,7 @@
 %{
-#include "./include/exp-to-ast.h"
+#include "./include/expToAst.h"
+#include "./include/genericToAst.h"
+#include "./include/stringToAst.h"
 #include "y.tab.h"
 #include <stdio.h>
 
@@ -57,7 +59,7 @@ whitespace		[ \f\n\r\t\v]
 <MATH>"||"									{ return OR; }
 <MATH>"!"									{ return NOT; }
 
-<STRING>","                                 { return CHARS; }
+<STRING>","                                 { strcpy(yylval.string,yytext); return CHARS; }
 ","                                         { return COM; }
 
 "("											{ return OPEN_PARENTHESIS; }
@@ -73,7 +75,7 @@ whitespace		[ \f\n\r\t\v]
 
 <MATH>{digit}+								{ yylval.integer = atoi(yytext); return INTEGER; }
 
-<STRING>({character}|{whitespace})+         { return CHARS; }
+<STRING>({character}|{whitespace})+         { strcpy(yylval.string,yytext); return CHARS; }
 
 <MATH,INITIAL>{whitespace}					{ }
 

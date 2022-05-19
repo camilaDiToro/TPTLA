@@ -1,4 +1,4 @@
-#include "./include/exp-to-ast.h"
+#include "./include/expToAst.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,7 @@
 **                       NODE BUILDING
 **************************************************************************************/
 
-ExpNode * newExpNode(getModeFunction gm, evaluateIntegerFunction ei, evaluateStringFunction es, int ivalue, char* cvalue, ExpNode* left, ExpNode * right){
+ExpNode * newExpNode(getModeFunction gm, evaluateIntegerFunction ei, evaluateStringFunction es, int ivalue, char* cvalue, ExpNode* left, ExpNode* right){
     ExpNode * newNode = malloc(sizeof(ExpNode));
     if(newNode == NULL){
         printf("Error while trying to allocate memory \n");
@@ -21,6 +21,18 @@ ExpNode * newExpNode(getModeFunction gm, evaluateIntegerFunction ei, evaluateStr
     newNode->cvalue = cvalue;
     newNode->left = left;
     newNode->right = right;
+	return newNode;
+}
+
+ExpResultNode * newExpResultNode(evaluateFunction e, char* cvalue, ExpNode* exp){
+    ExpResultNode * newNode = calloc(1,sizeof(ExpNode));
+    if(newNode == NULL){
+        printf("Error while trying to allocate memory \n");
+        return NULL;
+    }
+    newNode->evaluate = e;
+    newNode->cvalue = cvalue;
+    newNode->exp = exp;
 	return newNode;
 }
 
@@ -66,14 +78,7 @@ char * evaluate(SymbolTableP symbolTable, struct ExpResultNode * expNode){
     
 
 ExpResultNode * ExpressionResultExpAction(ExpNode * exp){
-    ExpResultNode * newNode = calloc(1,sizeof(ExpNode));
-    if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
-    }
-    newNode->evaluate = &evaluate;
-    newNode->exp = exp;
-	return newNode;
+    return newExpResultNode(&evaluate, NULL, exp);
 }
 
 
@@ -110,7 +115,6 @@ ExpNode* FactorExpressionExpAction(ExpNode* factor){
     return factor;
 }
 
-// Factors
 ExpNode * ConstantFactorExpAction(ExpNode * expNode) {
     printf("ConstantFactorExpAction() \n");
 	return expNode;
@@ -128,7 +132,7 @@ ExpNode* VariableFactorGrammarAction(ExpNode * expNode){
 char * returnStringVariable(SymbolTableP symbolTable, ExpNode * expNode){
     SymbolEntryP entry = getEntryFromTable(symbolTable, expNode->cvalue);
     if (entry == NULL){
-        return -1; 
+        return NULL; 
     } // No estaba definida la variable a la hora de consumirla 
     return entry->value;
 }
@@ -173,8 +177,12 @@ ExpNode * IntegerConstantExpAction(const int value) {
     return newExpNode(&integerMode,&returnIntegerValue, &returnIntegerAsString, value, NULL, NULL, NULL );
 }
 
+char * returnString(SymbolTableP symbolTable, struct ExpResultNode * expNode){
+    return expNode->cvalue;
+}
 
-ExpResultNode * ProgramGrammarAction(ExpResultNode ** program, ExpResultNode * expNode) {
-    *program = expNode;
-    return expNode;
+ExpResultNode * StringConstantExpAction(char * string){
+    char * cvalue = malloc(strlen(string) + 1);
+    strcpy(cvalue, string);
+    return newExpResultNode(&returnString, cvalue, NULL);
 }

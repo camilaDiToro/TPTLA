@@ -1,5 +1,6 @@
-#include "include/exp-to-ast.h"
-#include "include/ast-to-html.h"
+#include "include/astToHTML.h"
+#include "include/expToAst.h"
+#include "include/stringToAst.h"
 
 #include "y.tab.h"
 #include <stdlib.h>
@@ -10,9 +11,11 @@
 #define P(...) fprintf(output, ##__VA_ARGS__);
 FILE *output;
 
-void yyerror(ExpResultNode **program, char *s);
+void yyerror(GenericNode **program, char *s);
 
-void tree_to_html(ExpResultNode *program, FILE *file) {
+static void string_to_html(SymbolTable * table, void * node);
+
+void tree_to_html(GenericNode *program, FILE *file) {
 
     SymbolTable * table = newEmptySymbolTable(); 
     SymbolEntry * s1 = newSymbol("i", "hola", STRING); 
@@ -30,5 +33,16 @@ void tree_to_html(ExpResultNode *program, FILE *file) {
     table = newScope(table); 
 
     output = file;
-    P("%s",program->evaluate(table, program));
+    if(program->nodeType == STRING_NODE){
+        string_to_html(table, program->node);
+    }
+}
+
+static void string_to_html(SymbolTable * table, void * node){
+    StringNode* s = (StringNode*)node;
+    while(s!=NULL){
+        s->exp->evaluate(table, s->exp);
+        P("%s", s->exp->evaluate(table, s->exp));
+        s = s->next;
+    }    
 }

@@ -2,12 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "include/exp-to-ast.h"
+#include "include/expToAst.h"
+#include "include/genericToAst.h"
+#include "include/stringToAst.h"
+
 
 // Extern prototypes
 
 extern int yylex();
-void yyerror(ExpResultNode ** program, char *s);
+void yyerror(GenericNode ** program, char *s);
 
 extern FILE * out;
 
@@ -18,10 +21,14 @@ extern FILE * out;
     int integer;
     struct ExpNode * expNode;
     struct ExpResultNode * expResultNode;
+	struct GenericNode * genericNode;
+	struct StringNode * stringNode;
 }
 
 %type <expNode> constant factor variable expression
-%type <expResultNode> expression_result program
+%type <expResultNode> expression_result string_constant
+%type <genericNode> program json
+%type <stringNode> string string_body
 
 // IDs de los tokens generados desde Flex:
 %token ADD
@@ -67,7 +74,7 @@ extern FILE * out;
 %token CLOSE_BRA
 
 %token <integer> INTEGER
-%token CHARS
+%token <string> CHARS
 
 %token START_MATH
 %token END_MATH
@@ -76,12 +83,38 @@ extern FILE * out;
 %left ADD SUB
 %left MUL DIV
 
-%parse-param {ExpResultNode ** program}
+%parse-param {GenericNode ** program}
 
 %%
-program: QUOTE expression_result QUOTE             				{ $$ = ProgramGrammarAction(program, $2);}
+
+program: json													{ printf("ProgramGenericAction\n"); $$ = ProgramGenericAction(program, $1);}
+	; 						
+
+json: string													{ printf("NewNodeGenericAction\n"); $$ = NewNodeGenericAction((void*)$1, STRING_NODE); }
+	;
+
+/*************************************************************************************************************
+**                                            TIPOS DE FILAS (ROWs)
+*************************************************************************************************************/
 
 
+
+/*************************************************************************************************************
+**                                         TIPOS BASICOS - STRING Y ARRAY
+**************************************************************************************************************/
+
+string: QUOTE string_body QUOTE 								{ printf("StringAction\n"); $$ = StringAction($2); }
+	| QUOTE QUOTE												{ printf("EmptyStringAction\n"); $$ = EmptyStringAction(); }
+	;
+
+string_body: string_constant									{ printf("NewNodeStringAction\n"); $$ = NewNodeStringAction($1, NULL); }
+	| expression_result											{ printf("NewNodeStringAction\n"); $$ = NewNodeStringAction($1, NULL); }
+	| string_constant string_body 								{ printf("NewNodeStringAction\n"); $$ = NewNodeStringAction($1, $2); }
+	| expression_result string_body 							{ printf("NewNodeStringAction\n"); $$ = NewNodeStringAction($1, $2); }
+	;
+
+string_constant: CHARS                                          { printf("StringConstantExpAction %s\n", $1); $$ = StringConstantExpAction($1); }
+	;
 
 /************************************************************************************************************
 **                                                MATH EXPRESSIONS
