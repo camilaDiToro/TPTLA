@@ -1,6 +1,7 @@
 #include "include/astToHTML.h"
 #include "include/expToAst.h"
 #include "include/basicTypeToAst.h"
+#include "include/jsonToAst.h"
 
 #include "y.tab.h"
 #include <stdlib.h>
@@ -16,6 +17,7 @@ void yyerror(GenericNode **program, char *s);
 static void string_to_html(SymbolTable * table, void * node);
 static void array_to_html(SymbolTable * table, void * node);
 static void generic_to_html(SymbolTable * table, GenericNode * node);
+static void jsonIfToHTML(SymbolTable * table, void * node);
 
 void tree_to_html(GenericNode *program, FILE *file, SymbolTable * table) {
 
@@ -40,28 +42,42 @@ void tree_to_html(GenericNode *program, FILE *file, SymbolTable * table) {
     generic_to_html(table, program);
 }
 
-static void generic_to_html(SymbolTable * table, GenericNode * node){
-    if(node->nodeType == STRING_NODE){
+static void generic_to_html(SymbolTable * table, GenericNode * node) {
+    if(node->nodeType == STRING_NODE) {
         string_to_html(table, node->node);
     }
-    else if(node->nodeType == ARRAY_NODE){
+    else if(node->nodeType == ARRAY_NODE) {
         array_to_html(table, node->node);
+    }else if(node->nodeType == JSON_IF_NODE) {
+        jsonIfToHTML(table, node->node);
     }
 }
 
-static void string_to_html(SymbolTable * table, void * node){
+static void string_to_html(SymbolTable * table, void * node) {
     StringNode* s = (StringNode*)node;
-    while(s!=NULL){
+    while(s!=NULL) {
         s->exp->evaluate(table, s->exp);
         P("%s", s->exp->evaluate(table, s->exp));
         s = s->next;
     }    
 }
 
-static void array_to_html(SymbolTable * table, void * node){
+static void array_to_html(SymbolTable * table, void * node) {
     ArrayNode* a = (ArrayNode*)node;
     while(a!=NULL){
         generic_to_html(table, a->json);
         a = a->next;
     }    
+}
+
+static void jsonIfToHTML(SymbolTable * table, void * node) {
+    IfNode* ifn = (IfNode*)node;
+    StringNode* cond = ifn->condition;
+    char * condValue = cond->exp->evaluate(table, cond->exp);
+    if(strcmp(condValue,"1") == 0) {
+        generic_to_html(table, ifn->then);
+    }
+    else {
+        generic_to_html(table, ifn->otherwise);
+    }
 }

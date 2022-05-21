@@ -5,6 +5,7 @@
 #include "include/expToAst.h"
 #include "include/genericToAst.h"
 #include "include/basicTypeToAst.h"
+#include "include/jsonToAst.h"
 
 
 // Extern prototypes
@@ -24,13 +25,15 @@ extern FILE * out;
 	struct GenericNode * genericNode;
 	struct StringNode * stringNode;
 	struct ArrayNode * arrayNode;
+	struct IfNode * ifNode;
 }
 
 %type <expNode> constant factor variable expression
 %type <expResultNode> expression_result string_constant
-%type <genericNode> program json
-%type <stringNode> string string_body
+%type <genericNode> program json row_then row_else
+%type <stringNode> string string_body row_condition
 %type <arrayNode> array array_body
+%type <ifNode> json_if json_if_body
 
 // IDs de los tokens generados desde Flex:
 %token ADD
@@ -94,13 +97,30 @@ program: json													{ printf("ProgramGenericAction\n"); $$ = ProgramGeneri
 
 json: string													{ printf("NewNodeGenericAction\n"); $$ = NewNodeGenericAction((void*)$1, STRING_NODE); }
     | array														{ printf("JSON TYPE: Array\n"); 	$$ = NewNodeGenericAction((void*)$1, ARRAY_NODE);}
+	| json_if													{ printf("JSON TYPE: If\n"); 		$$ = NewNodeGenericAction((void*)$1, JSON_IF_NODE);}
+	;
+
+json_if: OPEN_CURL json_if_body	CLOSE_CURL						{ printf("JSON IF THEN \n"); 		$$ = $2;}
+	|	 OPEN_CURL json_if_body COM row_else CLOSE_CURL			{ printf("JSON IF ELSE \n"); 		$$ = AddElseJsonIfAction($2, $4);}
+	;
+
+json_if_body: row_type_if COM row_condition COM row_then        { printf("JSON IF BODY\n"); 		$$ = NewNodeJsonIfAction($3, $5);}
 	;
 
 /*************************************************************************************************************
 **                                            TIPOS DE FILAS (ROWs)
 *************************************************************************************************************/
+row_type_if: TAG_TYPE TPOINTS TAG_IF							{ printf("JSON TYPE IF ROW\n"); }
+	;
 
+row_condition: TAG_CONDITION TPOINTS string						{ printf("JSON CONDITION ROW\n"); 	$$ = $3;}
+	;
 
+row_then: TAG_THEN TPOINTS json									{ printf("JSON THEN ROW\n"); 		$$ = $3;}
+	;
+
+row_else: TAG_ELSE TPOINTS json									{ printf("JSON ELSE ROW\n"); 		$$ = $3;}
+	;
 
 /*************************************************************************************************************
 **                                         TIPOS BASICOS - STRING Y ARRAY
