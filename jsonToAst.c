@@ -15,3 +15,15 @@ IfNode * NewNodeJsonIfAction(StringNode * condition, GenericNode * then){
     newNode->then = then;
 	return newNode;
 }
+
+ReadNode * NewNodeJsonReadAction(char * varName, GenericNode * content){
+    ReadNode * newNode = calloc(1, sizeof(ReadNode));
+    if(newNode == NULL){
+        printf("Error while trying to allocate memory \n");
+        return NULL;
+    }
+    newNode->varName = malloc(strlen(varName) +1);
+    strcpy(newNode->varName, varName);
+    newNode->content = content;
+	return newNode;
+}

@@ -1,11 +1,14 @@
+#define  _GNU_SOURCE
 #include "include/astToHTML.h"
 #include "include/expToAst.h"
 #include "include/basicTypeToAst.h"
 #include "include/jsonToAst.h"
 
+#include <stdio.h>
 #include "y.tab.h"
 #include <stdlib.h>
 #include <string.h>
+
 
 #define MAX_VAR_NAME_LENGTH 256
 
@@ -18,6 +21,7 @@ static void stringToHTML(SymbolTable * table, void * node);
 static void arrayToHTML(SymbolTable * table, void * node);
 static void genericToHTML(SymbolTable * table, GenericNode * node);
 static void jsonIfToHTML(SymbolTable * table, void * node);
+static void readToHTML(SymbolTable * table, void * node);
 
 typedef void (*builderFunction)(SymbolTable * table, void * node);
 
@@ -55,10 +59,25 @@ static void jsonIfToHTML(SymbolTable * table, void * node) {
     }
 }
 
+static void readToHTML(SymbolTable * table, void * node){
+    ReadNode* r = (ReadNode*)node;
+    table = newScope(table);
+
+    printf("Please enter a line:\n");
+    char *line = NULL;
+    size_t len = 0;
+    getline(&line, &len, stdin);
+    addSymbolToTable(table, newSymbol(r->varName, line,  STRING));
+    genericToHTML(table, r->content);
+    free(line);
+}
+
 static builderFunction buiders[] = {
     /* STRING_NODE */       (builderFunction)stringToHTML,
     /* ARRAY_NODE */        (builderFunction)arrayToHTML,
     /* JSON_IF_NODE */      (builderFunction)jsonIfToHTML,
+    /* JSON_FOR_NODE */     (builderFunction)NULL,
+    /* JSON_READ_NODE */    (builderFunction)readToHTML
 };
 
 
