@@ -1,6 +1,1 @@
-{
-    "@type": "@if", 
-    "@condition": "1", 
-    "@then": "hola", 
-    "@else": "chau"
-}
+["asahksd", "${argv[0] + 1}"]

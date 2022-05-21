@@ -6,6 +6,6 @@
 #include "symbolTable.h"
 
 // From AST tree to HTML
-void tree_to_html(GenericNode *program, FILE *file, SymbolTable * table);
+void treeToHTML(GenericNode *program, FILE *file, SymbolTable * table);
 
 #endif

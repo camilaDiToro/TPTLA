@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     //Print headers
     fprintf(out, "<!DOCTYPE html>\n");
 
-    tree_to_html(program, out, newScope(table));
+    treeToHTML(program, out, newScope(table));
     fclose(out);
 
     printf("\nEnd\n");

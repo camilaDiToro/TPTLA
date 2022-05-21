@@ -6,10 +6,12 @@
 typedef enum NodeType {
     STRING_NODE = 0, 
     ARRAY_NODE = 1,
-    JSON_GENERIC_NODE = 2, 
-    JSON_IF_NODE = 3, 
-    JSON_FOR_NODE = 4,
-    JSON_READ_NODE = 5
+    JSON_IF_NODE = 2, 
+    JSON_FOR_NODE = 3,
+    JSON_READ_NODE = 4,
+
+    //Must be the last one
+    JSON_GENERIC_NODE = 5 
 } NodeType;
 
 typedef struct GenericNode{
