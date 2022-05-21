@@ -1,7 +1,7 @@
 %{
 #include "./include/expToAst.h"
 #include "./include/genericToAst.h"
-#include "./include/stringToAst.h"
+#include "./include/basicTypeToAst.h"
 #include "y.tab.h"
 #include <stdio.h>
 

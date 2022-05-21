@@ -4,7 +4,7 @@
 #include <string.h>
 #include "include/expToAst.h"
 #include "include/genericToAst.h"
-#include "include/stringToAst.h"
+#include "include/basicTypeToAst.h"
 
 
 // Extern prototypes
@@ -23,12 +23,14 @@ extern FILE * out;
     struct ExpResultNode * expResultNode;
 	struct GenericNode * genericNode;
 	struct StringNode * stringNode;
+	struct ArrayNode * arrayNode;
 }
 
 %type <expNode> constant factor variable expression
 %type <expResultNode> expression_result string_constant
 %type <genericNode> program json
 %type <stringNode> string string_body
+%type <arrayNode> array array_body
 
 // IDs de los tokens generados desde Flex:
 %token ADD
@@ -91,6 +93,7 @@ program: json													{ printf("ProgramGenericAction\n"); $$ = ProgramGeneri
 	; 						
 
 json: string													{ printf("NewNodeGenericAction\n"); $$ = NewNodeGenericAction((void*)$1, STRING_NODE); }
+    | array														{ printf("JSON TYPE: Array\n"); 	$$ = NewNodeGenericAction((void*)$1, ARRAY_NODE);}
 	;
 
 /*************************************************************************************************************
@@ -103,14 +106,22 @@ json: string													{ printf("NewNodeGenericAction\n"); $$ = NewNodeGeneric
 **                                         TIPOS BASICOS - STRING Y ARRAY
 **************************************************************************************************************/
 
-string: QUOTE string_body QUOTE 								{ printf("StringAction\n"); $$ = StringAction($2); }
-	| QUOTE QUOTE												{ printf("EmptyStringAction\n"); $$ = EmptyStringAction(); }
+array: OPEN_BRA array_body CLOSE_BRA							{ printf("NON EMPTY ARRAY\n"); 		$$ = ArrayAction($2);}
+	|  OPEN_BRA CLOSE_BRA										{ printf("EMPTY ARRAY\n"); 			$$ = EmptyArrayAction();}
 	;
 
-string_body: string_constant									{ printf("NewNodeStringAction\n"); $$ = NewNodeStringAction($1, NULL); }
-	| expression_result											{ printf("NewNodeStringAction\n"); $$ = NewNodeStringAction($1, NULL); }
-	| string_constant string_body 								{ printf("NewNodeStringAction\n"); $$ = NewNodeStringAction($1, $2); }
-	| expression_result string_body 							{ printf("NewNodeStringAction\n"); $$ = NewNodeStringAction($1, $2); }
+array_body: json                                          		{ printf("body array\n"); 			$$ = NewNodeArrayAction($1, NULL);}
+	| json COM array_body                                       { printf("body array concat\n"); 	$$ = NewNodeArrayAction($1, $3);}
+	;
+
+string: QUOTE string_body QUOTE 								{ printf("StringAction\n");			$$ = StringAction($2); }
+	| QUOTE QUOTE												{ printf("EmptyStringAction\n"); 	$$ = EmptyStringAction(); }
+	;
+
+string_body: string_constant									{ printf("NewNodeStringAction\n"); 	$$ = NewNodeStringAction($1, NULL); }
+	| expression_result											{ printf("NewNodeStringAction\n"); 	$$ = NewNodeStringAction($1, NULL); }
+	| string_constant string_body 								{ printf("NewNodeStringAction\n"); 	$$ = NewNodeStringAction($1, $2); }
+	| expression_result string_body 							{ printf("NewNodeStringAction\n"); 	$$ = NewNodeStringAction($1, $2); }
 	;
 
 string_constant: CHARS                                          { printf("StringConstantExpAction %s\n", $1); $$ = StringConstantExpAction($1); }

@@ -11,7 +11,7 @@ all: parser
 parser:
 	lex $(SRC_FOLDER)/lang.l
 	yacc -d $(SRC_FOLDER)/lang.y
-	$(CC) $(CCFLAGS) $(SRC_FOLDER)/symbolTable.c $(SRC_FOLDER)/genericToAst.c $(SRC_FOLDER)/stringToAst.c $(SRC_FOLDER)/expToAst.c $(SRC_FOLDER)/astToHTML.c lex.yy.c y.tab.c $(SRC_FOLDER)/main.c $(YLFLAGS) -o jtoh
+	$(CC) $(CCFLAGS) $(SRC_FOLDER)/symbolTable.c $(SRC_FOLDER)/genericToAst.c $(SRC_FOLDER)/basicTypeToAst.c $(SRC_FOLDER)/expToAst.c $(SRC_FOLDER)/astToHTML.c lex.yy.c y.tab.c $(SRC_FOLDER)/main.c $(YLFLAGS) -o jtoh
 	rm -rf $(OBJ)
 
 clean: 
