@@ -19,39 +19,12 @@ extern int optind, opterr, optopt;
 
 int main(int argc, char **argv)
 {
-    // Option parsing
-    int c;
-    while (1)
-    {
-        c = getopt(argc, argv, "o:");
-        if (c == -1)
-            break;
-        if (c == 'o')
-        {
-            out_file = optarg;
-        }
+    yyin = fopen(argv[optind], "r");
+    if (yyin == NULL) {
+        perror("File can not be opened");
+        exit(EXIT_FAILURE);
     }
-    if (optind >= argc)
-    {
-        printf("Reading program from STDIN\n");
-    }
-    else if (optind < argc - 1)
-    {
-        if (optind < argc - 1)
-        {
-            fprintf(stderr, "Usage: %s [-o] [in.file]\n", argv[0]);
-            exit(EXIT_FAILURE);
-        }
-    }
-    else
-    {
-        yyin = fopen(argv[optind], "r");
-        if (yyin == NULL)
-        {
-            perror("File can not be opened");
-            exit(EXIT_FAILURE);
-        }
-    }
+    
 
     // Evaluacion semantica y construccion de AST
     // try to modify this, its not doing whats expected to be done
@@ -81,17 +54,26 @@ int main(int argc, char **argv)
     }
 
 
-    // Llevado del AST a un html
+    // AST to html
     out = fopen("out.html", "w+");
-    if (out == NULL)
-    {
+    if (out == NULL) {
         perror("Error creating auxiliary file");
         exit(EXIT_FAILURE);
     }
+    
+    // Adding arguments as variables
+    // All the arguments are considered as strings
+    SymbolTable * table = newEmptySymbolTable();
+    char argument[12];
+    for(int i=0 ; i<argc ; ++i) { 
+        sprintf(argument, "argv[%d]", i);
+        addSymbolToTable(table, newSymbol(argument, argv[i], STRING));
+    }
 
+    //Print headers
     fprintf(out, "<!DOCTYPE html>\n");
 
-    tree_to_html(program, out);
+    tree_to_html(program, out, newScope(table));
     fclose(out);
 
     printf("\nEnd\n");

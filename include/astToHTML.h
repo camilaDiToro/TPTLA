@@ -3,8 +3,9 @@
 
 #include <stdio.h>
 #include "genericToAst.h"
+#include "symbolTable.h"
 
 // From AST tree to HTML
-void tree_to_html(GenericNode *program, FILE *file);
+void tree_to_html(GenericNode *program, FILE *file, SymbolTable * table);
 
 #endif

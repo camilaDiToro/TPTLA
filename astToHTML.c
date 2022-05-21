@@ -11,18 +11,15 @@
 #define P(...) fprintf(output, ##__VA_ARGS__);
 FILE *output;
 
-//JUST FOR TESTING
-int first = 1;
-
 void yyerror(GenericNode **program, char *s);
 
 static void string_to_html(SymbolTable * table, void * node);
 static void array_to_html(SymbolTable * table, void * node);
 static void generic_to_html(SymbolTable * table, GenericNode * node);
 
-void tree_to_html(GenericNode *program, FILE *file) {
+void tree_to_html(GenericNode *program, FILE *file, SymbolTable * table) {
 
-    SymbolTable * table = newEmptySymbolTable(); 
+    /*SymbolTable * table = newEmptySymbolTable(); 
     SymbolEntry * s1 = newSymbol("i", "hola", STRING); 
     SymbolEntry * s2 = newSymbol("s", "122", INT); 
     SymbolEntry * s3 = newSymbol("j", "this is a string test", STRING); 
@@ -35,7 +32,9 @@ void tree_to_html(GenericNode *program, FILE *file) {
     addSymbolToTable(table, s4); 
     addSymbolToTable(table, s5); 
     table = newScope(table);
-    first = 0; 
+
+    SymbolEntry * s6 = newSymbol("s", "1", INT); 
+    addSymbolToTable(table, s6);*/
 
     output = file;
     generic_to_html(table, program);

@@ -5,7 +5,8 @@
 
 SymbolEntry * newSymbol(char * name, char * value, SymbolType type) {
     SymbolEntry * entry = malloc(sizeof(SymbolEntry)); 
-    entry->key = name; 
+    entry->key = malloc(strlen(name) + 1); 
+    strcpy(entry->key, name);
     entry->value = value; 
     entry->type = type; 
     return entry; 

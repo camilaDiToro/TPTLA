@@ -143,8 +143,9 @@ int returnIntegerVariable(SymbolTableP symbolTable, ExpNode * expNode){
 
 ExpNode * VariableSubscriptExpAction(char * varName, int index){
     printf("VariableSubscriptExpAction(%s[%d]) \n", varName, index);
-    char * cvalue = malloc(strlen(varName) + 1);
-    strcpy(cvalue, varName);
+    char * cvalue = malloc(strlen(varName) + 8);
+    sprintf(cvalue, "%s[%d]", varName, index);
+    printf("%s",cvalue);
 	return newExpNode(&varMode,&returnIntegerVariable,&returnStringVariable, index, cvalue, NULL, NULL);
 }
 

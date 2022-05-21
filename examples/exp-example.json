@@ -1,1 +1,1 @@
-["holaa ${5 + s} alta expresion  ${s + i}", [],[":)"]]
+["${argv[0]}"]
