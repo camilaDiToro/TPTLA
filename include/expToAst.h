@@ -7,26 +7,26 @@
 #include "symbolTable.h"
 
 typedef struct ExpNode{
-    SymbolType (*getMode)(SymbolTableP symbolTable, struct ExpNode * expNode);
-    int   (*evaluateInteger)(SymbolTableP symbolTable, struct ExpNode * expNode);
-    char* (*evaluateString)(SymbolTableP symbolTable, struct ExpNode * expNode);
+    SymbolType (*getMode)(SymbolTable* symbolTable, struct ExpNode * expNode);
+    int   (*evaluateInteger)(SymbolTable* symbolTable, struct ExpNode * expNode);
+    char* (*evaluateString)(SymbolTable* symbolTable, struct ExpNode * expNode);
     int ivalue;
     char * cvalue;
     struct ExpNode * left;
     struct ExpNode * right;
 }ExpNode;
 
-typedef SymbolType  (*getModeFunction)(SymbolTableP symbolTable, struct ExpNode * expNode);
-typedef int         (*evaluateIntegerFunction)(SymbolTableP symbolTable, struct ExpNode * expNode);
-typedef char*       (*evaluateStringFunction)(SymbolTableP symbolTable, struct ExpNode * expNode);
+typedef SymbolType  (*getModeFunction)(SymbolTable* symbolTable, struct ExpNode * expNode);
+typedef int         (*evaluateIntegerFunction)(SymbolTable* symbolTable, struct ExpNode * expNode);
+typedef char*       (*evaluateStringFunction)(SymbolTable* symbolTable, struct ExpNode * expNode);
 
 typedef struct ExpResultNode{
-    char* (*evaluate)(SymbolTableP symbolTable, struct ExpResultNode * expNode);
+    char* (*evaluate)(SymbolTable* symbolTable, struct ExpResultNode * expNode);
     char* cvalue;
     struct ExpNode * exp;
 }ExpResultNode;
 
-typedef char*       (*evaluateFunction)(SymbolTableP symbolTable, struct ExpResultNode * expNode);
+typedef char*       (*evaluateFunction)(SymbolTable* symbolTable, struct ExpResultNode * expNode);
 
 //Expresions
 ExpResultNode * ExpressionResultExpAction(ExpNode * exp);

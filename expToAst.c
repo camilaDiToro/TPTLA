@@ -40,22 +40,22 @@ ExpResultNode * newExpResultNode(evaluateFunction e, char* cvalue, ExpNode* exp)
 **                       TYPE DEFINITION
 **************************************************************************************/
 
-SymbolType integerMode(SymbolTableP symbolTable, struct ExpNode * expNode){
+SymbolType integerMode(SymbolTable* symbolTable, struct ExpNode* expNode){
     return INT;
 }
 
-SymbolType stringMode(SymbolTableP symbolTable, struct ExpNode * expNode){
+SymbolType stringMode(SymbolTable* symbolTable, struct ExpNode* expNode){
     return STRING;
 }
-SymbolType varMode(SymbolTableP symbolTable, struct ExpNode * expNode){
-    SymbolEntryP entry = getEntryFromTable(symbolTable, expNode->cvalue);
+SymbolType varMode(SymbolTable* symbolTable, struct ExpNode* expNode){
+    SymbolEntry* entry = getEntryFromTable(symbolTable, expNode->cvalue);
     if (entry == NULL) // No estaba definida la variable a la hora de consumirla 
         return -1; 
 
     return entry->type;
 }
 
-SymbolType orMode(SymbolTableP symbolTable, struct ExpNode * expNode){
+SymbolType orMode(SymbolTable* symbolTable, struct ExpNode * expNode){
     return expNode->left->getMode(symbolTable, expNode->left) | expNode->right->getMode(symbolTable, expNode->right);
 }
 
@@ -63,7 +63,7 @@ SymbolType orMode(SymbolTableP symbolTable, struct ExpNode * expNode){
 **                       EXPRESSION RESULT
 **************************************************************************************/
 
-char * evaluate(SymbolTableP symbolTable, struct ExpResultNode * expNode){
+char * evaluate(SymbolTable* symbolTable, struct ExpResultNode * expNode){
     ExpNode * e = expNode->exp;
     if(e->getMode(symbolTable, e) == STRING){
         expNode->cvalue = e->evaluateString(symbolTable, e);
@@ -86,11 +86,11 @@ ExpResultNode * ExpressionResultExpAction(ExpNode * exp){
 **                       EXPRESSIONS
 **************************************************************************************/
 
-int addIntegers(SymbolTableP symbolTable, ExpNode * expNode){
+int addIntegers(SymbolTable* symbolTable, ExpNode * expNode){
     return expNode->left->evaluateInteger(symbolTable, expNode->left) + expNode->right->evaluateInteger(symbolTable, expNode->right);
 }
 
-char * concatStrigns(SymbolTableP symbolTable, ExpNode * expNode){
+char * concatStrigns(SymbolTable* symbolTable, ExpNode * expNode){
     char * left =  expNode->left->evaluateString(symbolTable, expNode->left);
     char * right = expNode->right->evaluateString(symbolTable, expNode->right);
     expNode->cvalue = realloc(expNode->cvalue, strlen(left)+strlen(right) + 1);
@@ -129,15 +129,15 @@ ExpNode* VariableFactorGrammarAction(ExpNode * expNode){
 **                      VARIABLES
 **************************************************************************************/
 
-char * returnStringVariable(SymbolTableP symbolTable, ExpNode * expNode){
-    SymbolEntryP entry = getEntryFromTable(symbolTable, expNode->cvalue);
+char * returnStringVariable(SymbolTable* symbolTable, ExpNode * expNode){
+    SymbolEntry* entry = getEntryFromTable(symbolTable, expNode->cvalue);
     if (entry == NULL){
         return NULL; 
     } // No estaba definida la variable a la hora de consumirla 
     return entry->value;
 }
 
-int returnIntegerVariable(SymbolTableP symbolTable, ExpNode * expNode){
+int returnIntegerVariable(SymbolTable* symbolTable, ExpNode * expNode){
     return atoi(returnStringVariable(symbolTable, expNode));
 }
 
@@ -160,11 +160,11 @@ ExpNode * VariableExpAction(char * varName){
 /*************************************************************************************
 **                      CONSTANTS
 **************************************************************************************/
-int returnIntegerValue(SymbolTableP symbolTable, ExpNode * expNode){
+int returnIntegerValue(SymbolTable* symbolTable, ExpNode * expNode){
     return expNode->ivalue;
 }
 
-char* returnIntegerAsString(SymbolTableP symbolTable, ExpNode * expNode){
+char* returnIntegerAsString(SymbolTable* symbolTable, ExpNode * expNode){
     if(expNode->cvalue == NULL){
         int length = snprintf( NULL, 0, "%d", expNode->ivalue );
         expNode->cvalue = malloc( length + 1 );
@@ -178,7 +178,7 @@ ExpNode * IntegerConstantExpAction(const int value) {
     return newExpNode(&integerMode,&returnIntegerValue, &returnIntegerAsString, value, NULL, NULL, NULL );
 }
 
-char * returnString(SymbolTableP symbolTable, struct ExpResultNode * expNode){
+char * returnString(SymbolTable* symbolTable, struct ExpResultNode * expNode){
     return expNode->cvalue;
 }
 

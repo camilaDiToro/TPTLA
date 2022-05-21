@@ -21,10 +21,6 @@ typedef struct SymbolTable {
     struct SymbolTable * previousTable; 
 } SymbolTable; 
 
-typedef struct SymbolEntry * SymbolEntryP;
-typedef struct SymbolTable * SymbolTableP;
-
-
 SymbolEntry * newSymbol(char * name, char * value, SymbolType type); 
 void printSymbolEntry(SymbolEntry * entry); 
 void printSymbolEntryList(SymbolEntry * entry); 
