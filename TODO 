@@ -1,4 +1,5 @@
 1. Test some programs to check if the current code is working properly (keep in mind that by the moment we just have addition)
-2. Manage variables that will be trated as arrays
-3. Add methods for the other expressions
-4. Start developing string node
+2. Add methods for the other expressions
+3. Start developing for node and generic node
+4. Revise "generic node" naming
+5. Free the hole tree at the end -> implement free for each of the structures
