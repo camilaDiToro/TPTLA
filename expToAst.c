@@ -138,7 +138,7 @@ static void undefinedVariable(SymbolTable* symbolTable, char * varName){
     state.succeed = FALSE;
     state.undefinedVariables = TRUE;
     printf("The variable %s is undefined. \n", varName);
-    addSymbolToTable(symbolTable, newSymbol(varName, "undefined", STRING));
+    addSymbolToTable(symbolTable, newSymbol(varName, "{undefined}", STRING));
 }
 
 char * returnStringVariable(SymbolTable* symbolTable, ExpNode * expNode){
