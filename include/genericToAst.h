@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "shared.h"
+
+
 typedef enum NodeType {
     STRING_NODE = 0, 
     ARRAY_NODE = 1,
@@ -19,7 +22,7 @@ typedef struct GenericNode{
     void * node;
 }GenericNode;
 
-GenericNode * ProgramGenericAction(GenericNode ** program, GenericNode * node);
+GenericNode * ProgramGenericAction(GenericNode * node);
 GenericNode * NewNodeGenericAction(void * node, NodeType type);
 
 #endif

@@ -3,6 +3,7 @@
 #include "include/expToAst.h"
 #include "include/basicTypeToAst.h"
 #include "include/jsonToAst.h"
+#include "include/shared.h"
 
 #include <stdio.h>
 #include "y.tab.h"
@@ -14,8 +15,6 @@
 
 #define P(...) fprintf(output, ##__VA_ARGS__);
 FILE *output;
-
-void yyerror(GenericNode **program, char *s);
 
 static void stringToHTML(SymbolTable * table, void * node);
 static void arrayToHTML(SymbolTable * table, void * node);

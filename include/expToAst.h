@@ -1,10 +1,8 @@
 #ifndef EXP_TO_AST_H_
 #define EXP_TO_AST_H_
 
-#define TRUE 1
-#define FALSE 0
-
 #include "symbolTable.h"
+#include "shared.h"
 
 typedef struct ExpNode{
     SymbolType (*getMode)(SymbolTable* symbolTable, struct ExpNode * expNode);

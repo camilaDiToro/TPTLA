@@ -1,8 +1,7 @@
-#include "./include/genericToAst.h"
-
-
-GenericNode * ProgramGenericAction(GenericNode ** program, GenericNode * node) {
-    *program = node;
+#include "include/genericToAst.h"
+GenericNode * ProgramGenericAction(GenericNode * node) {
+    state.program = node;
+    state.succeed = TRUE;
     return node;
 }
 

@@ -6,12 +6,9 @@
 #include "include/genericToAst.h"
 #include "include/basicTypeToAst.h"
 #include "include/jsonToAst.h"
-
+#include "include/shared.h"
 
 // Extern prototypes
-
-extern int yylex();
-void yyerror(GenericNode ** program, char *s);
 
 extern FILE * out;
 
@@ -91,11 +88,10 @@ extern FILE * out;
 %left ADD SUB
 %left MUL DIV
 
-%parse-param {GenericNode ** program}
 
 %%
 
-program: json													{ printf("ProgramGenericAction\n"); $$ = ProgramGenericAction(program, $1);}
+program: json													{ printf("ProgramGenericAction\n"); $$ = ProgramGenericAction($1);}
 	; 						
 
 json: string													{ printf("NewNodeGenericAction\n"); $$ = NewNodeGenericAction((void*)$1, STRING_NODE); }
