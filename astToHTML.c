@@ -66,6 +66,7 @@ static void readToHTML(SymbolTable * table, void * node){
     char *line = NULL;
     size_t len = 0;
     getline(&line, &len, stdin);
+    line[strcspn(line, "\n")] = 0;
     addSymbolToTable(table, newSymbol(r->varName, line,  STRING));
     genericToHTML(table, r->content);
     free(line);
