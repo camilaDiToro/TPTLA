@@ -20,6 +20,7 @@ extern int optind, opterr, optopt;
 // Application global state
 typedef struct {
 	int succeed;
+	int undefinedVariables;
 	void* program;
 	SymbolTable * table;
 } CompilerState;

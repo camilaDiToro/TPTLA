@@ -11,8 +11,7 @@ CompilerState state;
 
 static void generator(void);
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     yyin = fopen(argv[optind], "r");
     if (yyin == NULL) {
         perror("File can not be opened");
@@ -22,6 +21,7 @@ int main(int argc, char **argv)
     //Initialize the state of the compiler
     state.program = NULL;
 	state.succeed = FALSE;
+    state.undefinedVariables = FALSE;
 
     // Adding arguments as variables, all the arguments are considered as strings
     state.table = newEmptySymbolTable();
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
     }
 
     // Semantic evaluation and AST building
-    printf("Compilando...\n");
+    printf("Compiling...\n");
 	const int result = yyparse();
 	switch (result) {
 		case 0:
@@ -41,12 +41,16 @@ int main(int argc, char **argv)
                 printf("The HTML file was generated sucessfuly \n");
 			}
 			else {
-				printf("Se produjo un error en la aplicacion.");
-				return -1;
+                if(state.undefinedVariables){
+                    printf("There were undefined variables in the JSON \n");
+				    return EXIT_FAILURE;
+                }
+				printf("There was an error in the application \n");
+				return EXIT_FAILURE;
 			}
 			break;
 		case 1:
-			printf("Bison finalizo debido a un error de sintaxis.\n");
+			printf("Bison finalized due to a syntax error.\n");
 			return EXIT_FAILURE;
 		case 2:
 			printf("Bison finalizo abruptamente debido a que ya no hay memoria disponible.\n");
@@ -76,6 +80,4 @@ void generator(void) {
 
     treeToHTML(state.program, yyout, newScope(state.table));
     fclose(yyout);
-
-    printf("\nEnd\n");
 }

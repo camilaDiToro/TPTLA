@@ -1,7 +1,11 @@
 #include "./include/expToAst.h"
+#include "./include/shared.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+
+static void undefinedVariable(SymbolTable* symbolTable, char * varName);
 
 
 /*************************************************************************************
@@ -49,9 +53,10 @@ SymbolType stringMode(SymbolTable* symbolTable, struct ExpNode* expNode){
 }
 SymbolType varMode(SymbolTable* symbolTable, struct ExpNode* expNode){
     SymbolEntry* entry = getEntryFromTable(symbolTable, expNode->cvalue);
-    if (entry == NULL) // No estaba definida la variable a la hora de consumirla 
-        return -1; 
-
+    if (entry == NULL) {
+        undefinedVariable(symbolTable, expNode->cvalue);
+        return varMode(symbolTable,expNode);
+    }
     return entry->type;
 }
 
@@ -129,11 +134,19 @@ ExpNode* VariableFactorGrammarAction(ExpNode * expNode){
 **                      VARIABLES
 **************************************************************************************/
 
+static void undefinedVariable(SymbolTable* symbolTable, char * varName){
+    state.succeed = FALSE;
+    state.undefinedVariables = TRUE;
+    printf("The variable %s is undefined. \n", varName);
+    addSymbolToTable(symbolTable, newSymbol(varName, "undefined", STRING));
+}
+
 char * returnStringVariable(SymbolTable* symbolTable, ExpNode * expNode){
     SymbolEntry* entry = getEntryFromTable(symbolTable, expNode->cvalue);
-    if (entry == NULL){
-        return NULL; 
-    } // No estaba definida la variable a la hora de consumirla 
+    if (entry == NULL){ // The variable was not defined
+        undefinedVariable(symbolTable, expNode->cvalue);
+        return returnStringVariable(symbolTable,expNode);
+    } 
     return entry->value;
 }
 
