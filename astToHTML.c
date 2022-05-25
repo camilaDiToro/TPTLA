@@ -4,6 +4,8 @@
 #include "include/basicTypeToAst.h"
 #include "include/jsonToAst.h"
 #include "include/shared.h"
+#include "include/itoa.h"
+
 
 #include <stdio.h>
 #include "y.tab.h"
@@ -72,17 +74,44 @@ static void readToHTML(SymbolTable * table, void * node){
     free(line);
 }
 
+static void forInRangeToHTML(SymbolTable * table, void * node) {
+    ForInRangeNode* f = (ForInRangeNode*) node; 
+    table = newScope(table);
+
+    int start = atoi(f->startEndWrapperNode->start->evaluate(table, f->startEndWrapperNode->start));
+    int end = atoi(f->startEndWrapperNode->end->evaluate(table, f->startEndWrapperNode->end));
+    if (f->varName != NULL) {
+        SymbolEntry * entry = newSymbol(f->varName, itoa(start), INT);  // TODO: Modify using TAD, no direct manipulation
+        if (f->varName != NULL)
+            addSymbolToTable(table, entry);
+        for (int i=start; i<end; i++) {
+            free(entry->value); 
+            entry->value = itoa(i);  
+            genericToHTML(table, f->content);
+        }
+    } else {
+        for (int i=start; i<end; i++) {
+            genericToHTML(table, f->content);
+        }
+    }
+    
+
+}
+
 static builderFunction buiders[] = {
     /* STRING_NODE */       (builderFunction)stringToHTML,
     /* ARRAY_NODE */        (builderFunction)arrayToHTML,
     /* JSON_IF_NODE */      (builderFunction)jsonIfToHTML,
-    /* JSON_FOR_NODE */     (builderFunction)NULL,
-    /* JSON_READ_NODE */    (builderFunction)readToHTML
+    /* JSON_FOR_IN_RANGE_NODE */     (builderFunction)forInRangeToHTML,
+    /* JSON_READ_NODE */    (builderFunction)readToHTML, 
+    /* JSON_FOR_NODE */     (builderFunction)NULL
 };
 
 
 static void genericToHTML(SymbolTable * table, GenericNode * node) {
+    table = newScope(table); 
     printf("genericToHTML %d\n", node->nodeType);
     builderFunction builder = buiders[node->nodeType];
     builder(table,node->node);
+    table = deleteScope(table); 
 }

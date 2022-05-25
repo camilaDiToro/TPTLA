@@ -1,5 +1,6 @@
 #include "include/jsonToAst.h"
 
+
 IfNode * AddElseJsonIfAction(IfNode * baseNode, GenericNode * otherwise){
     baseNode->otherwise = otherwise;
     return baseNode;
@@ -27,3 +28,34 @@ ReadNode * NewNodeJsonReadAction(char * varName, GenericNode * content){
     newNode->content = content;
 	return newNode;
 }
+
+ForInRangeNode * NewNodeJsonForInRangeAction(StartEndWrapperNode * startEndWrapperNode, char * varName, GenericNode * content) {
+   
+    ForInRangeNode * newNode = calloc(1, sizeof(ForInRangeNode));
+    if(newNode == NULL){
+        printf("Error while trying to allocate memory \n");
+        return NULL;
+    }
+
+    if (varName != NULL) {
+        newNode->varName = malloc(strlen(varName) +1);
+        strcpy(newNode->varName, varName);
+    }
+
+    newNode->content = content;
+    newNode->startEndWrapperNode = startEndWrapperNode; 
+    return newNode;
+} 
+
+StartEndWrapperNode * NewStartEndWrapperNode(ExpResultNode * startExpNode, ExpResultNode * endExpNode) {
+    StartEndWrapperNode * startEndWrapperNode = calloc(1, sizeof(StartEndWrapperNode)); 
+    if(startEndWrapperNode == NULL){
+        printf("Error while trying to allocate memory \n");
+        return NULL;
+    }
+    startEndWrapperNode->start = startExpNode;
+    startEndWrapperNode->end = endExpNode; 
+    return startEndWrapperNode; 
+}
+
+

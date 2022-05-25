@@ -39,6 +39,17 @@ SymbolEntry * getSymbolWithKey(SymbolEntry * entry, char * key) {
     return getSymbolWithKey(entry->next, key); 
 }
 
+// Delete symbol list 
+
+void deleteSymbolEntryList(SymbolEntry * entry) {
+    
+    if (entry == NULL)
+        return; 
+    
+    deleteSymbolEntryList(entry->next); 
+    free(entry); 
+}
+
 // Table creation 
 
 SymbolTable * newScope(SymbolTable * previousTable) {
@@ -50,6 +61,19 @@ SymbolTable * newScope(SymbolTable * previousTable) {
 
 SymbolTable * newEmptySymbolTable() {
     return newScope(NULL); 
+}
+
+// Table erasure 
+
+SymbolTable * deleteScope(SymbolTable * table) {
+    
+    if (table == NULL)
+        return NULL; 
+
+        
+    deleteSymbolEntryList(table->top); 
+    free(table);
+    return table->previousTable; 
 }
 
 // Table debugging 
