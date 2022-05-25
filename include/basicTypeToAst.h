@@ -14,12 +14,15 @@ typedef struct ArrayNode{
     struct ArrayNode * next;
 }ArrayNode;
 
-StringNode * StringAction(StringNode * stringNode); 
-StringNode * EmptyStringAction();
-StringNode * NewNodeStringAction(ExpResultNode * expResultNode, StringNode * nextStringNode);
+StringNode* StringAction(StringNode * stringNode); 
+StringNode* EmptyStringAction();
+StringNode* NewNodeStringAction(ExpResultNode * expResultNode, StringNode * nextStringNode);
 
-ArrayNode * ArrayAction(ArrayNode * arrayNode); 
+ArrayNode* ArrayAction(ArrayNode * arrayNode); 
 ArrayNode * EmptyArrayAction();
 ArrayNode * NewNodeArrayAction(GenericNode * genericNode, ArrayNode * nextArrayNode);
+
+void FreeStringNode(StringNode* node);
+void FreeArrayNode(ArrayNode* node);
 
 #endif
