@@ -59,3 +59,22 @@ StartEndWrapperNode * NewStartEndWrapperNode(ExpResultNode * startExpNode, ExpRe
 }
 
 
+void FreeReadNode(ReadNode* node){
+    if(node==NULL)
+        return;
+
+    if(node->varName!=NULL)
+        free(node->varName);
+
+    FreeGenericNode(node->content);
+    free(node);
+}
+
+void FreeIfNode(IfNode* node){
+    if(node == NULL)    
+        return;
+    FreeStringNode(node->condition);
+    FreeGenericNode(node->then);
+    FreeGenericNode(node->otherwise);
+    free(node);
+}

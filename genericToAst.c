@@ -1,5 +1,6 @@
 #include "include/genericToAst.h"
 #include "include/basicTypeToAst.h"
+#include "include/jsonToAst.h"
 
 typedef void (*FreeNode)(void* node);
 
@@ -23,9 +24,9 @@ GenericNode* NewNodeGenericAction(void* node, NodeType type) {
 static FreeNode freeNode[] = {
         /* STRING_NODE */               (FreeNode)FreeStringNode,
         /* ARRAY_NODE */                (FreeNode)FreeArrayNode,
-        /* JSON_IF_NODE */              (FreeNode)NULL,
+        /* JSON_IF_NODE */              (FreeNode)FreeIfNode,
         /* JSON_FOR_IN_RANGE_NODE */    (FreeNode)NULL,
-        /* JSON_READ_NODE */            (FreeNode)NULL,
+        /* JSON_READ_NODE */            (FreeNode)FreeReadNode,
         /* JSON_FOR */                  (FreeNode)NULL,
         /* JSON_GENERIC_NODE */         (FreeNode)NULL
 };

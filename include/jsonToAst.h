@@ -33,9 +33,10 @@ IfNode * AddElseJsonIfAction(IfNode * baseNode, GenericNode * otherwise);
 IfNode * NewNodeJsonIfAction(StringNode * condition, GenericNode * then);
 
 ReadNode * NewNodeJsonReadAction(char * varName, GenericNode * content);
-
 ForInRangeNode * NewNodeJsonForInRangeAction(StartEndWrapperNode * startEndWrapperNode, char * varName, GenericNode * content); 
-
 StartEndWrapperNode * NewStartEndWrapperNode(ExpResultNode * startExpNode, ExpResultNode * endExpNode); 
+
+void FreeReadNode(ReadNode* node);
+void FreeIfNode(IfNode* node);
 
 #endif

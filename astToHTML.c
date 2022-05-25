@@ -104,7 +104,7 @@ static builderFunction buiders[] = {
     /* JSON_IF_NODE */              (builderFunction)jsonIfToHTML,
     /* JSON_FOR_IN_RANGE_NODE */    (builderFunction)forInRangeToHTML,
     /* JSON_READ_NODE */            (builderFunction)readToHTML, 
-    /* JSON_FOR_NODE */             (builderFunction)NULL
+    /* JSON_FOR_NODE */             (builderFunction)NULL,
     /* JSON_GENERIC_NODE */         (builderFunction)NULL
 };
 
