@@ -200,3 +200,28 @@ ExpResultNode * StringConstantExpAction(char * string){
     strcpy(cvalue, string);
     return newExpResultNode(&returnString, cvalue, NULL);
 }
+
+
+/*************************************************************************************
+**                           Free
+**************************************************************************************/
+
+void FreeExpResultNode(ExpResultNode * node){
+    if(node == NULL)
+        return;
+    if(node->cvalue != NULL)
+        free(node->cvalue);
+    
+    FreeExpNode(node->exp);
+    free(node);
+}
+
+void FreeExpNode(ExpNode * node){
+    if(node == NULL)
+        return;
+    if(node->cvalue != NULL)
+        free(node->cvalue);
+    FreeExpNode(node->right);
+    FreeExpNode(node->left);
+    free(node);
+}

@@ -23,5 +23,7 @@ typedef struct GenericNode{
 
 GenericNode * ProgramGenericAction(GenericNode * node);
 GenericNode * NewNodeGenericAction(void * node, NodeType type);
+void FreeGenericNode(GenericNode * node);
+
 
 #endif

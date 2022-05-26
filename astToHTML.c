@@ -99,12 +99,13 @@ static void forInRangeToHTML(SymbolTable * table, void * node) {
 }
 
 static builderFunction buiders[] = {
-    /* STRING_NODE */       (builderFunction)stringToHTML,
-    /* ARRAY_NODE */        (builderFunction)arrayToHTML,
-    /* JSON_IF_NODE */      (builderFunction)jsonIfToHTML,
-    /* JSON_FOR_IN_RANGE_NODE */     (builderFunction)forInRangeToHTML,
-    /* JSON_READ_NODE */    (builderFunction)readToHTML, 
-    /* JSON_FOR_NODE */     (builderFunction)NULL
+    /* STRING_NODE */               (builderFunction)stringToHTML,
+    /* ARRAY_NODE */                (builderFunction)arrayToHTML,
+    /* JSON_IF_NODE */              (builderFunction)jsonIfToHTML,
+    /* JSON_FOR_IN_RANGE_NODE */    (builderFunction)forInRangeToHTML,
+    /* JSON_READ_NODE */            (builderFunction)readToHTML, 
+    /* JSON_FOR_NODE */             (builderFunction)NULL,
+    /* JSON_GENERIC_NODE */         (builderFunction)NULL
 };
 
 

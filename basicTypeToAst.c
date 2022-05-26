@@ -1,4 +1,5 @@
 #include "./include/basicTypeToAst.h"
+#include "./include/genericToAst.h"
 
 StringNode * StringAction(StringNode * stringNode) {
     return stringNode;
@@ -34,4 +35,19 @@ ArrayNode * NewNodeArrayAction(GenericNode * genericNode, ArrayNode * nextArrayN
     newNode->next = nextArrayNode;
     newNode->json = genericNode;
 	return newNode;
+}
+
+void FreeStringNode(StringNode * node){
+    if(node==NULL)
+        return;
+    FreeExpResultNode(node->exp);
+    FreeStringNode(node->next);
+    free(node);
+}
+void FreeArrayNode(ArrayNode * node){
+    if(node==NULL)
+        return;
+    FreeGenericNode(node->json);
+    FreeArrayNode(node->next);
+    free(node);
 }

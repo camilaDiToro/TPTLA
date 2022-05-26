@@ -26,6 +26,11 @@ typedef struct ExpResultNode{
 
 typedef char*       (*evaluateFunction)(SymbolTable* symbolTable, struct ExpResultNode * expNode);
 
+
+//Frees
+void FreeExpResultNode(ExpResultNode * node);
+void FreeExpNode(ExpNode * node);
+
 //Expresions
 ExpResultNode * ExpressionResultExpAction(ExpNode * exp);
 ExpNode* AdditionExpressionGrammarAction(ExpNode* exp1, ExpNode* exp2);
