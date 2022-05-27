@@ -94,8 +94,26 @@ static void forInRangeToHTML(SymbolTable * table, void * node) {
             genericToHTML(table, f->content);
         }
     }
-    
+    table = deleteScope(table); // TODO: check
+}
 
+static void forListToHTML(SymbolTable * table, void * node) {
+    ForListNode* f = (ForListNode*) node; 
+    table = newScope(table);
+
+    SymbolEntry * entry = newSymbol(f->varName, NULL, INT);  // TODO: Modify using TAD, no direct manipulation
+    addSymbolToTable(table, entry);
+    ArrayNode * current = f->list; 
+    while (current != NULL) {
+        // StringNode * str = (StringNode *)(current->json);  // CHECK!! Horrible, casi tanto como el codigo de camila  
+        // entry->value = str->exp->evaluate(table, str->exp); 
+        // genericToHTML(table, f->content);
+        current = current->next; 
+        printf("HELLO WORLD!!\n"); 
+    }
+
+    // TODO: check   
+    table = deleteScope(table); 
 }
 
 static builderFunction buiders[] = {
@@ -104,7 +122,7 @@ static builderFunction buiders[] = {
     /* JSON_IF_NODE */              (builderFunction)jsonIfToHTML,
     /* JSON_FOR_IN_RANGE_NODE */    (builderFunction)forInRangeToHTML,
     /* JSON_READ_NODE */            (builderFunction)readToHTML, 
-    /* JSON_FOR_NODE */             (builderFunction)NULL,
+    /* JSON_FOR_LIST_NODE */        (builderFunction)forListToHTML,
     /* JSON_GENERIC_NODE */         (builderFunction)NULL
 };
 

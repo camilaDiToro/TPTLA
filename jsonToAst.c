@@ -58,6 +58,21 @@ StartEndWrapperNode * NewStartEndWrapperNode(ExpResultNode * startExpNode, ExpRe
     return startEndWrapperNode; 
 }
 
+ForListNode * NewNodeJsonForListAction(ArrayNode * arrayNode, char * varName, GenericNode * content) {
+    ForListNode * newNode = calloc(1, sizeof(ForListNode));
+    if(newNode == NULL){
+        printf("Error while trying to allocate memory \n");
+        return NULL;
+    }
+
+    newNode->varName = malloc(strlen(varName) +1);
+    strcpy(newNode->varName, varName);
+    newNode->content = content;
+    newNode->list = arrayNode; 
+    return newNode; 
+}
+
+
 
 void FreeReadNode(ReadNode* node){
     if(node==NULL)

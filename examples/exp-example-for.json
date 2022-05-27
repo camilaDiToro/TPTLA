@@ -1,11 +1,6 @@
 {
     "@type": "@for", 
     "@var": "i", 
-    "@inrange": ["${2}", "${5}"],
-    "@content": {
-        "@type": "@for", 
-        "@var": "j", 
-        "@inrange": ["${i}", "${5}"],
-        "@content": "${i}${j}..."
-    }
+    "@in": ["queso", "pan", "queso", "salsa"],
+    "@content": "Hola//"
 }

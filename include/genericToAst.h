@@ -12,7 +12,7 @@ typedef enum NodeType {
     JSON_IF_NODE = 2, 
     JSON_FOR_IN_RANGE_NODE = 3,
     JSON_READ_NODE = 4,
-    JSON_FOR_NODE = 5,
+    JSON_FOR_LIST_NODE = 5,
     JSON_GENERIC_NODE = 6 
 } NodeType;
 

@@ -27,6 +27,12 @@ typedef struct ForInRangeNode{
     StartEndWrapperNode * startEndWrapperNode; 
 }ForInRangeNode;
 
+typedef struct ForListNode{
+    GenericNode * content;    
+    char * varName;
+    ArrayNode * list; 
+}ForListNode;
+
 
 
 IfNode * AddElseJsonIfAction(IfNode * baseNode, GenericNode * otherwise);
@@ -35,6 +41,8 @@ IfNode * NewNodeJsonIfAction(StringNode * condition, GenericNode * then);
 ReadNode * NewNodeJsonReadAction(char * varName, GenericNode * content);
 ForInRangeNode * NewNodeJsonForInRangeAction(StartEndWrapperNode * startEndWrapperNode, char * varName, GenericNode * content); 
 StartEndWrapperNode * NewStartEndWrapperNode(ExpResultNode * startExpNode, ExpResultNode * endExpNode); 
+ForListNode * NewNodeJsonForListAction(ArrayNode * arrayNode, char * varName, GenericNode * content); 
+
 
 void FreeReadNode(ReadNode* node);
 void FreeIfNode(IfNode* node);
