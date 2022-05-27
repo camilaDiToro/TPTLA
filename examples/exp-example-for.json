@@ -1,6 +1,16 @@
 {
     "@type": "@for", 
     "@var": "i", 
-    "@in": ["queso", "pan", "queso"],
-    "@content": "Hola//"
+    "@inrange": ["${1}", "${10}"],
+    "@content": ["${i}", {
+        "@type": "@if", 
+        "@condition": "(2 > 7)*7 - 2", 
+        "@then": {
+            "@type": "@for", 
+            "@var": "name", 
+            "@in": ["gonzalo", "camila"],
+            "@content": "${name}"
+        }
+    } 
+]
 }

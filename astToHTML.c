@@ -31,10 +31,30 @@ void treeToHTML(GenericNode *program, FILE *file, SymbolTable * table) {
     genericToHTML(table, program);
 }
 
+static char * stringNodeToString(SymbolTable * table, StringNode * node) {
+    int bufferSize = 10; 
+    char * buffer = malloc(bufferSize); 
+    int i = 0; 
+    StringNode* s = node;
+    while(s!=NULL) {
+        char * returned = s->exp->evaluate(table, s->exp);
+        for (int j = 0; returned[j]; j++) {
+            if (i>=bufferSize) {
+                bufferSize *= 2; 
+                buffer = realloc(buffer, bufferSize); 
+            }
+            buffer[i++] = returned[j]; 
+        }
+        s = s->next;
+    } 
+    buffer[i] = 0; 
+    return buffer; 
+}
+
 static void stringToHTML(SymbolTable * table, void * node) {
     StringNode* s = (StringNode*)node;
     while(s!=NULL) {
-        s->exp->evaluate(table, s->exp);
+        printf("STRING: %s\n", s->exp->evaluate(table, s->exp));
         P("%s", s->exp->evaluate(table, s->exp));
         s = s->next;
     }    
@@ -51,11 +71,11 @@ static void arrayToHTML(SymbolTable * table, void * node) {
 static void jsonIfToHTML(SymbolTable * table, void * node) {
     IfNode* ifn = (IfNode*)node;
     StringNode* cond = ifn->condition;
-    char * condValue = cond->exp->evaluate(table, cond->exp);
+    char * condValue = stringNodeToString(table, cond);  
     if(strcmp(condValue,"1") == 0) {
         genericToHTML(table, ifn->then);
     }
-    else {
+    else if (ifn->otherwise != NULL) {
         genericToHTML(table, ifn->otherwise);
     }
 }
@@ -101,12 +121,11 @@ static void forListToHTML(SymbolTable * table, void * node) {
     ArrayNode * current = f->list; 
     while (current != NULL) {
         if (current->json->nodeType == STRING_NODE) {
-            // StringNode * str = (StringNode *)(current->json);  // CHECK!! Horrible, casi tanto como el codigo de camila  
-            // printf("%p, %p\n", str, str->exp);
-            // entry->value = str->exp->evaluate(table, str->exp); 
-            // genericToHTML(table, f->content);
+            StringNode * str = (StringNode *)(current->json->node);   
+            entry->value =  stringNodeToString(table, str); 
+            genericToHTML(table, f->content);
             current = current->next; 
-            printf("HELLO WORLD!!\n"); 
+            free(entry->value); 
         }
     }
 
