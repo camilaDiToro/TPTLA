@@ -76,8 +76,6 @@ static void readToHTML(SymbolTable * table, void * node){
 
 static void forInRangeToHTML(SymbolTable * table, void * node) {
     ForInRangeNode* f = (ForInRangeNode*) node; 
-    table = newScope(table);
-
     int start = atoi(f->startEndWrapperNode->start->evaluate(table, f->startEndWrapperNode->start));
     int end = atoi(f->startEndWrapperNode->end->evaluate(table, f->startEndWrapperNode->end));
     if (f->varName != NULL) {
@@ -94,26 +92,24 @@ static void forInRangeToHTML(SymbolTable * table, void * node) {
             genericToHTML(table, f->content);
         }
     }
-    table = deleteScope(table); // TODO: check
 }
 
 static void forListToHTML(SymbolTable * table, void * node) {
     ForListNode* f = (ForListNode*) node; 
-    table = newScope(table);
-
-    SymbolEntry * entry = newSymbol(f->varName, NULL, INT);  // TODO: Modify using TAD, no direct manipulation
+    SymbolEntry * entry = newSymbol(f->varName, NULL, STRING);  // TODO: Modify using TAD, no direct manipulation
     addSymbolToTable(table, entry);
     ArrayNode * current = f->list; 
     while (current != NULL) {
-        // StringNode * str = (StringNode *)(current->json);  // CHECK!! Horrible, casi tanto como el codigo de camila  
-        // entry->value = str->exp->evaluate(table, str->exp); 
-        // genericToHTML(table, f->content);
-        current = current->next; 
-        printf("HELLO WORLD!!\n"); 
+        if (current->json->nodeType == STRING_NODE) {
+            // StringNode * str = (StringNode *)(current->json);  // CHECK!! Horrible, casi tanto como el codigo de camila  
+            // printf("%p, %p\n", str, str->exp);
+            // entry->value = str->exp->evaluate(table, str->exp); 
+            // genericToHTML(table, f->content);
+            current = current->next; 
+            printf("HELLO WORLD!!\n"); 
+        }
     }
 
-    // TODO: check   
-    table = deleteScope(table); 
 }
 
 static builderFunction buiders[] = {

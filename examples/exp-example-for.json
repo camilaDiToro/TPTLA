@@ -1,6 +1,6 @@
 {
     "@type": "@for", 
     "@var": "i", 
-    "@in": ["queso", "pan", "queso", "salsa"],
+    "@in": ["queso", "pan", "queso"],
     "@content": "Hola//"
 }
