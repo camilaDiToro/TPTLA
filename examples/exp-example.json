@@ -1,4 +1,6 @@
-{"@type" : "@read",
- "@var" : "x",
- "@content":"${x + o + nananadf}"
+{
+    "@type": "@for", 
+    "@var": "i", 
+    "@in": ["queso", ["pan"], "queso"],
+    "@content": "Hola//"
 }

@@ -34,6 +34,25 @@ void* outOfMemory(ErrorManager* em){
     return NULL;
 }
 
+void invalidVariableTypeInForLoop(ErrorManager* em, char * varName){
+    state.succeed = FALSE;
+    static char * msg = "Invalid type inside the array of a for loop. You can only iterate throw strings. Ommited iteration\n";
+    ErrorNode * newNode = malloc(sizeof(ErrorNode));
+    newNode->msg = malloc(strlen(msg) + 1);
+    strcpy(newNode->msg, msg);
+
+    newNode->type = INVALID_TYPE;
+    newNode->next = NULL;
+
+    if(em->first == NULL){
+        em->first = newNode;
+        em->last = newNode;
+    }else{
+        em->last->next = newNode;
+    }
+    em->errorCount += 1;
+}
+
 void showErrors(ErrorManager* em){
     if(em->errorsShown){
         return;
