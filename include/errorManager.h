@@ -16,12 +16,16 @@ typedef struct ErrorNode {
 
 typedef struct ErrorManager {
     int errorCount;
+    int errorsShown;
+    int outOfMemory;
     ErrorNode* first;
     ErrorNode* last;
 } ErrorManager;
 
 ErrorManager* newErrorManager();
 void addUndefindedVariable(ErrorManager* em, char* varName);
+void* outOfMemory(ErrorManager* em);
 void showErrors(ErrorManager* em);
+void freeErrorManager(ErrorManager* em);
 
 #endif

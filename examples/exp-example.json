@@ -1,4 +1,4 @@
 {"@type" : "@read",
  "@var" : "x",
- "@content":"${x + o}"
+ "@content":"${x + o + nananadf}"
 }

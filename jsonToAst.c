@@ -9,8 +9,7 @@ IfNode * AddElseJsonIfAction(IfNode * baseNode, GenericNode * otherwise){
 IfNode * NewNodeJsonIfAction(StringNode * condition, GenericNode * then){
     IfNode * newNode = calloc(1, sizeof(IfNode));
     if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
+        return outOfMemory(state.errorManager);
     }
     newNode->condition = condition;
     newNode->then = then;
@@ -20,8 +19,7 @@ IfNode * NewNodeJsonIfAction(StringNode * condition, GenericNode * then){
 ReadNode * NewNodeJsonReadAction(char * varName, GenericNode * content){
     ReadNode * newNode = calloc(1, sizeof(ReadNode));
     if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
+        return outOfMemory(state.errorManager);
     }
     newNode->varName = malloc(strlen(varName) +1);
     strcpy(newNode->varName, varName);
@@ -33,8 +31,7 @@ ForInRangeNode * NewNodeJsonForInRangeAction(StartEndWrapperNode * startEndWrapp
    
     ForInRangeNode * newNode = calloc(1, sizeof(ForInRangeNode));
     if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
+        return outOfMemory(state.errorManager);
     }
 
     if (varName != NULL) {
@@ -50,8 +47,7 @@ ForInRangeNode * NewNodeJsonForInRangeAction(StartEndWrapperNode * startEndWrapp
 StartEndWrapperNode * NewStartEndWrapperNode(ExpResultNode * startExpNode, ExpResultNode * endExpNode) {
     StartEndWrapperNode * startEndWrapperNode = calloc(1, sizeof(StartEndWrapperNode)); 
     if(startEndWrapperNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
+        return outOfMemory(state.errorManager);
     }
     startEndWrapperNode->start = startExpNode;
     startEndWrapperNode->end = endExpNode; 
@@ -61,8 +57,7 @@ StartEndWrapperNode * NewStartEndWrapperNode(ExpResultNode * startExpNode, ExpRe
 ForListNode * NewNodeJsonForListAction(ArrayNode * arrayNode, char * varName, GenericNode * content) {
     ForListNode * newNode = calloc(1, sizeof(ForListNode));
     if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
+        return outOfMemory(state.errorManager);
     }
 
     newNode->varName = malloc(strlen(varName) +1);

@@ -1,4 +1,5 @@
 #include "include/errorManager.h"
+#include "include/shared.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,6 +10,7 @@ ErrorManager * newErrorManager(){
 }
 
 void addUndefindedVariable(ErrorManager* em, char * varName){
+    state.succeed = FALSE;
     static char * msg = "Undefined reference to variable \"%s\"";
     ErrorNode * newNode = malloc(sizeof(ErrorNode));
     newNode->msg = malloc(strlen(msg) + strlen(varName) + 1);
@@ -25,10 +27,36 @@ void addUndefindedVariable(ErrorManager* em, char * varName){
     em->errorCount += 1;
 }
 
+void* outOfMemory(ErrorManager* em){
+    em->errorCount+= 1;
+    state.succeed = FALSE;
+    em->outOfMemory = TRUE;
+    return NULL;
+}
+
 void showErrors(ErrorManager* em){
+    if(em->errorsShown){
+        return;
+    }
+    em->errorsShown = TRUE;
+    if (em->outOfMemory) {
+       printf("[Deadly error]: out of memory while trying to build de AST \n");
+    }
+    
     ErrorNode * aux = em->first;
     for(int i=1 ; aux!=NULL ; ++i){
         printf("[Error %i]: %s \n", i, aux->msg);
         aux = aux->next;
     }
+}
+
+void freeErrorManager(ErrorManager* em){
+    ErrorNode * en = em->first;
+    while(en!=NULL){
+        ErrorNode * aux = en->next;
+        free(en->msg);
+        free(en);
+        en = aux;
+    }
+    free(em);
 }
