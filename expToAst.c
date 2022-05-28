@@ -136,8 +136,7 @@ ExpNode* VariableFactorGrammarAction(ExpNode * expNode){
 
 static void undefinedVariable(SymbolTable* symbolTable, char * varName){
     state.succeed = FALSE;
-    state.undefinedVariables = TRUE;
-    printf("The variable %s is undefined. \n", varName);
+    addUndefindedVariable(state.errorManager, varName);
     addSymbolToTable(symbolTable, newSymbol(varName, "{undefined}", STRING));
 }
 

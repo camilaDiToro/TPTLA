@@ -21,8 +21,7 @@ int main(int argc, char **argv) {
     //Initialize the state of the compiler
     state.program = NULL;
 	state.succeed = FALSE;
-    state.undefinedVariables = FALSE;
-
+    state.errorManager = newErrorManager();
     // Adding arguments as variables, all the arguments are considered as strings
     state.table = newEmptySymbolTable();
     char argument[12];
@@ -41,8 +40,8 @@ int main(int argc, char **argv) {
                 printf("The HTML file was generated sucessfuly \n");
 			}
 			else {
-                if(state.undefinedVariables){
-                    printf("There were undefined variables in the JSON \n");
+                if(state.errorManager->errorCount != 0){
+                    showErrors(state.errorManager);
 				    return EXIT_FAILURE;
                 }
 				printf("There was an error in the application \n");
