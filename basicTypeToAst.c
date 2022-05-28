@@ -12,8 +12,7 @@ StringNode * EmptyStringAction() {
 StringNode * NewNodeStringAction(ExpResultNode * expResultNode, StringNode * nextStringNode) {
     StringNode * newNode = malloc(sizeof(StringNode));
     if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
+        return outOfMemory(state.errorManager);
     }
     newNode->next = nextStringNode;
     newNode->exp = expResultNode;
@@ -29,8 +28,7 @@ ArrayNode * EmptyArrayAction() {
 ArrayNode * NewNodeArrayAction(GenericNode * genericNode, ArrayNode * nextArrayNode) {
     ArrayNode * newNode = malloc(sizeof(ArrayNode));
     if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
+        return outOfMemory(state.errorManager);
     }
     newNode->next = nextArrayNode;
     newNode->json = genericNode;

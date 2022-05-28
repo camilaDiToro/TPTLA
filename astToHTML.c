@@ -5,6 +5,7 @@
 #include "include/jsonToAst.h"
 #include "include/shared.h"
 #include "include/itoa.h"
+#include "include/errorManager.h"
 
 
 #include <stdio.h>
@@ -126,7 +127,10 @@ static void forListToHTML(SymbolTable * table, void * node) {
             genericToHTML(table, f->content);
             current = current->next; 
             free(entry->value); 
+        }else{
+            invalidVariableTypeInForLoop(state.errorManager, f->varName);
         }
+        current = current->next; 
     }
 
 }

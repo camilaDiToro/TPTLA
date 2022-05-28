@@ -20,8 +20,8 @@ int main(int argc, char **argv) {
 
     //Initialize the state of the compiler
     state.program = NULL;
-	state.succeed = FALSE;
-    state.undefinedVariables = FALSE;
+	state.succeed = TRUE;
+    state.errorManager = newErrorManager();
 
     // Adding arguments as variables, all the arguments are considered as strings
     state.table = newEmptySymbolTable();
@@ -36,13 +36,20 @@ int main(int argc, char **argv) {
 	const int result = yyparse();
 	switch (result) {
 		case 0:
+            if(!state.succeed){
+                printf("Error found building the AST. The output was not generated.\n");
+                showErrors(state.errorManager);
+                freeErrorManager(state.errorManager);
+				return EXIT_FAILURE;
+            }
             generator();
 			if (state.succeed) {
                 printf("The HTML file was generated sucessfuly \n");
 			}
 			else {
-                if(state.undefinedVariables){
-                    printf("There were undefined variables in the JSON \n");
+                if(state.errorManager->errorCount != 0){
+                    showErrors(state.errorManager);
+                    freeErrorManager(state.errorManager);
 				    return EXIT_FAILURE;
                 }
 				printf("There was an error in the application \n");
@@ -51,13 +58,15 @@ int main(int argc, char **argv) {
 			break;
 		case 1:
 			printf("Bison finalized due to a syntax error.\n");
+            freeErrorManager(state.errorManager);
 			return EXIT_FAILURE;
 		case 2:
-			printf("Bison finalizo abruptamente debido a que ya no hay memoria disponible.\n");
-			break;
+			printf("Bison finalized due to a memory problem.\n");
+            freeErrorManager(state.errorManager);
             return EXIT_FAILURE;
 		default:
-			printf("Error desconocido mientras se ejecutaba el analizador Bison (codigo %d).\n", result);
+			printf("Unknoen error while executing Bison (code %d).\n", result);
+            freeErrorManager(state.errorManager);
             return EXIT_FAILURE;
     }
     return EXIT_SUCCESS;   
