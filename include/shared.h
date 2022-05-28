@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "symbolTable.h"
+#include "errorManager.h"
 
 #define FALSE 0
 #define TRUE !FALSE
@@ -20,7 +21,7 @@ extern int optind, opterr, optopt;
 // Application global state
 typedef struct {
 	int succeed;
-	int undefinedVariables;
+	ErrorManager* errorManager;
 	void* program;
 	SymbolTable * table;
 } CompilerState;

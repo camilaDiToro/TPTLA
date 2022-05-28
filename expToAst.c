@@ -15,8 +15,7 @@ static void undefinedVariable(SymbolTable* symbolTable, char * varName);
 ExpNode * newExpNode(getModeFunction gm, evaluateIntegerFunction ei, evaluateStringFunction es, int ivalue, char* cvalue, ExpNode* left, ExpNode* right){
     ExpNode * newNode = malloc(sizeof(ExpNode));
     if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
+        return outOfMemory(state.errorManager);
     }
     newNode->getMode = gm;
     newNode->evaluateInteger = ei;
@@ -31,8 +30,7 @@ ExpNode * newExpNode(getModeFunction gm, evaluateIntegerFunction ei, evaluateStr
 ExpResultNode * newExpResultNode(evaluateFunction e, char* cvalue, ExpNode* exp){
     ExpResultNode * newNode = calloc(1,sizeof(ExpNode));
     if(newNode == NULL){
-        printf("Error while trying to allocate memory \n");
-        return NULL;
+        return outOfMemory(state.errorManager);
     }
     newNode->evaluate = e;
     newNode->cvalue = cvalue;
@@ -136,8 +134,7 @@ ExpNode* VariableFactorGrammarAction(ExpNode * expNode){
 
 static void undefinedVariable(SymbolTable* symbolTable, char * varName){
     state.succeed = FALSE;
-    state.undefinedVariables = TRUE;
-    printf("The variable %s is undefined. \n", varName);
+    addUndefindedVariable(state.errorManager, varName);
     addSymbolToTable(symbolTable, newSymbol(varName, "{undefined}", STRING));
 }
 
