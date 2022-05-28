@@ -62,19 +62,32 @@ SymbolType orMode(SymbolTable* symbolTable, struct ExpNode * expNode){
     return expNode->left->getMode(symbolTable, expNode->left) | expNode->right->getMode(symbolTable, expNode->right);
 }
 
+SymbolType justIntegerMode(SymbolTable* symbolTable, struct ExpNode * expNode){
+    if(expNode->left->getMode(symbolTable, expNode->left) + expNode->right->getMode(symbolTable, expNode->right) ){
+        invalidSubOperation(state.errorManager);
+        return INVALID;
+    }
+    return INT;
+}
+
 /*************************************************************************************
 **                       EXPRESSION RESULT
 **************************************************************************************/
 
 char * evaluate(SymbolTable* symbolTable, struct ExpResultNode * expNode){
     ExpNode * e = expNode->exp;
-    if(e->getMode(symbolTable, e) == STRING){
+    SymbolType s = (e->getMode(symbolTable, e));
+    if(s == STRING){
         expNode->cvalue = e->evaluateString(symbolTable, e);
-    }else{
+    }else if(s == INT){
         int ans = e->evaluateInteger(symbolTable, e);
         int length = snprintf( NULL, 0, "%d", ans );
         expNode->cvalue = realloc( expNode->cvalue, length + 1 );
         snprintf(expNode->cvalue, length + 1, "%d", ans );
+    }else {
+        char * msg = "{undefined}";
+        expNode->cvalue = realloc(expNode->cvalue, strlen(msg) + 1);
+        strcpy(expNode->cvalue, msg);
     }
     return expNode->cvalue;
 }
@@ -103,9 +116,18 @@ char * concatStrigns(SymbolTable* symbolTable, ExpNode * expNode){
     return expNode->cvalue;
 }
 
-ExpNode* AdditionExpressionGrammarAction(ExpNode* exp1, ExpNode* exp2){
-    printf("AdditionExpressionGrammarAction \n");
+ExpNode* AdditionExpressionExpAction(ExpNode* exp1, ExpNode* exp2){
+    printf("AdditionExpressionExpAction \n");
     return newExpNode(&orMode,&addIntegers,&concatStrigns, -1, NULL, exp1, exp2);
+}
+
+int subIntegers(SymbolTable* symbolTable, ExpNode * expNode){
+    return expNode->left->evaluateInteger(symbolTable, expNode->left) - expNode->right->evaluateInteger(symbolTable, expNode->right);
+}
+
+ExpNode* SubtractionExpressionExpAction(ExpNode* exp1, ExpNode* exp2){
+    printf("SubtractionExpressionExpAction \n");
+    return newExpNode(&justIntegerMode,&subIntegers,NULL, -1, NULL, exp1, exp2);
 }
 
 
@@ -123,7 +145,7 @@ ExpNode * ConstantFactorExpAction(ExpNode * expNode) {
 	return expNode;
 }
 
-ExpNode* VariableFactorGrammarAction(ExpNode * expNode){
+ExpNode* VariableFactorExpAction(ExpNode * expNode){
     printf("VariableFactorGrammarAction() \n");
 	return expNode;
 }

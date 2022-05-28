@@ -197,12 +197,13 @@ string_constant: CHARS                                          { printf("String
 expression_result:	START_MATH expression END_MATH      		{ $$ = ExpressionResultExpAction($2); }
 	;
 
-expression: expression ADD expression							{ $$ = AdditionExpressionGrammarAction($1, $3); }
+expression: expression ADD expression							{ $$ = AdditionExpressionExpAction($1, $3); }
+	| expression SUB expression									{ $$ = SubtractionExpressionExpAction($1, $3); }
 	| factor													{ $$ = FactorExpressionExpAction($1); }
 	;
 
 factor: constant												{ $$ = ConstantFactorExpAction($1); }
-	| variable													{ $$ = VariableFactorGrammarAction($1); }
+	| variable													{ $$ = VariableFactorExpAction($1); }
 	;
 
 variable: VAR													{ $$ = VariableExpAction($1); }

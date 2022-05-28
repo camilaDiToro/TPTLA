@@ -28,5 +28,6 @@ void* outOfMemory(ErrorManager* em);
 void showErrors(ErrorManager* em);
 void freeErrorManager(ErrorManager* em);
 void invalidVariableTypeInForLoop(ErrorManager* em, char * varName);
+void invalidSubOperation(ErrorManager* em);
 
 #endif

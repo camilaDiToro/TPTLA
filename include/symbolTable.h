@@ -6,7 +6,8 @@
 
 typedef enum SymbolType {
     INT = 0,
-    STRING = 1
+    STRING = 1,
+    INVALID = 2
 } SymbolType; 
 
 typedef struct SymbolEntry {

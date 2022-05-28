@@ -55,7 +55,6 @@ static char * stringNodeToString(SymbolTable * table, StringNode * node) {
 static void stringToHTML(SymbolTable * table, void * node) {
     StringNode* s = (StringNode*)node;
     while(s!=NULL) {
-        printf("STRING: %s\n", s->exp->evaluate(table, s->exp));
         P("%s", s->exp->evaluate(table, s->exp));
         s = s->next;
     }    

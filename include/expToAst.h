@@ -33,12 +33,13 @@ void FreeExpNode(ExpNode * node);
 
 //Expresions
 ExpResultNode * ExpressionResultExpAction(ExpNode * exp);
-ExpNode* AdditionExpressionGrammarAction(ExpNode* exp1, ExpNode* exp2);
+ExpNode* AdditionExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
+ExpNode* SubtractionExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* FactorExpressionExpAction(ExpNode* factor);
 
 //Factor
 ExpNode* ConstantFactorExpAction(ExpNode * node);
-ExpNode* VariableFactorGrammarAction(ExpNode * node);
+ExpNode* VariableFactorExpAction(ExpNode * node);
 
 //Variable
 ExpNode* VariableSubscriptExpAction(char * varName, int index);

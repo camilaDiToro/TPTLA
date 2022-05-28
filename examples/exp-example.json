@@ -1,6 +1,4 @@
-{
-    "@type": "@for", 
-    "@var": "i", 
-    "@in": ["queso", ["pan"], "queso"],
-    "@content": "Hola//"
-}
+[{"@type" : "@read",
+ "@var" : "x",
+ "@content":"${5-x}"
+}]

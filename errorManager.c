@@ -9,13 +9,16 @@ ErrorManager * newErrorManager(){
     return calloc(1,sizeof(ErrorManager));
 }
 
-void addUndefindedVariable(ErrorManager* em, char * varName){
-    state.succeed = FALSE;
-    static char * msg = "Undefined reference to variable \"%s\"";
+/*typedef struct ErrorNode {
+    ErrorType type;
+    char* msg;
+    struct ErrorNode* next;
+} ErrorNode;*/
+
+static void newErrorNode(ErrorManager* em, ErrorType type, char * msg){
     ErrorNode * newNode = malloc(sizeof(ErrorNode));
-    newNode->msg = malloc(strlen(msg) + strlen(varName) + 1);
-    sprintf(newNode->msg, msg, varName);
-    newNode->type = UNDEFINED_VAR;
+    newNode->msg = msg;
+    newNode->type = type;
     newNode->next = NULL;
 
     if(em->first == NULL){
@@ -25,6 +28,14 @@ void addUndefindedVariable(ErrorManager* em, char * varName){
         em->last->next = newNode;
     }
     em->errorCount += 1;
+}
+
+void addUndefindedVariable(ErrorManager* em, char * varName){
+    state.succeed = FALSE;
+    static char * msg = "Undefined reference to variable \"%s\".";
+    char * nodeMsg = malloc(strlen(msg) + strlen(varName) + 1);
+    sprintf(nodeMsg, msg, varName);
+    newErrorNode(em, UNDEFINED_VAR, nodeMsg);
 }
 
 void* outOfMemory(ErrorManager* em){
@@ -36,21 +47,18 @@ void* outOfMemory(ErrorManager* em){
 
 void invalidVariableTypeInForLoop(ErrorManager* em, char * varName){
     state.succeed = FALSE;
-    static char * msg = "Invalid type inside the array of a for loop. You can only iterate through strings. Ommited iteration\n";
-    ErrorNode * newNode = malloc(sizeof(ErrorNode));
-    newNode->msg = malloc(strlen(msg) + 1);
-    strcpy(newNode->msg, msg);
+    static char * msg = "Invalid type inside the array of a for loop. You can only iterate through strings. Ommited iteration.";
+    char * nodeMsg = malloc(strlen(msg) + 1);
+    strcpy(nodeMsg, msg);
+    newErrorNode(em, INVALID_TYPE, nodeMsg);
+}
 
-    newNode->type = INVALID_TYPE;
-    newNode->next = NULL;
-
-    if(em->first == NULL){
-        em->first = newNode;
-        em->last = newNode;
-    }else{
-        em->last->next = newNode;
-    }
-    em->errorCount += 1;
+void invalidSubOperation(ErrorManager* em){
+    state.succeed = FALSE;
+    static char * msg = "The operation - is only defined over integers. The result was \"{undefined}\" due to an invalid type.";
+    char * nodeMsg = malloc(strlen(msg) + 1);
+    strcpy(nodeMsg, msg);
+    newErrorNode(em, INVALID_TYPE, nodeMsg);
 }
 
 void showErrors(ErrorManager* em){
