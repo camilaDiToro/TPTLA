@@ -1,4 +1,4 @@
 [{"@type" : "@read",
  "@var" : "x",
- "@content":"${5-x}"
+ "@content":"${(5)}"
 }]

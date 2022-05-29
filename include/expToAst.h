@@ -35,6 +35,7 @@ void FreeExpNode(ExpNode * node);
 ExpResultNode * ExpressionResultExpAction(ExpNode * exp);
 ExpNode* AdditionExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* SubtractionExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
+ExpNode* MultiplicationExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* FactorExpressionExpAction(ExpNode* factor);
 
 //Factor

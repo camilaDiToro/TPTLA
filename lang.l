@@ -62,8 +62,8 @@ whitespace		[ \f\n\r\t\v]
 <STRING>","                                 { strcpy(yylval.string,yytext); return CHARS; }
 ","                                         { return COM; }
 
-"("											{ return OPEN_PARENTHESIS; }
-")"											{ return CLOSE_PARENTHESIS; }
+<MATH>"("											{ return OPEN_PARENTHESIS; }
+<MATH>")"											{ return CLOSE_PARENTHESIS; }
 "{"											{ return OPEN_CURL; }
 "}"											{ return CLOSE_CURL; }
 "["                                         { return OPEN_BRA; }

@@ -61,6 +61,14 @@ void invalidSubOperation(ErrorManager* em){
     newErrorNode(em, INVALID_TYPE, nodeMsg);
 }
 
+void invalidMulOperation(ErrorManager* em){
+    state.succeed = FALSE;
+    static char * msg = "The operation * cannot be applyed over tow strings. The result was \"{undefined}\" due to an invalid type.";
+    char * nodeMsg = malloc(strlen(msg) + 1);
+    strcpy(nodeMsg, msg);
+    newErrorNode(em, INVALID_TYPE, nodeMsg);
+}
+
 void showErrors(ErrorManager* em){
     if(em->errorsShown){
         return;

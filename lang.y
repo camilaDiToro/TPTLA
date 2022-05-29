@@ -199,10 +199,12 @@ expression_result:	START_MATH expression END_MATH      		{ $$ = ExpressionResult
 
 expression: expression ADD expression							{ $$ = AdditionExpressionExpAction($1, $3); }
 	| expression SUB expression									{ $$ = SubtractionExpressionExpAction($1, $3); }
+	| expression MUL expression									{ $$ = MultiplicationExpressionExpAction($1, $3); }
 	| factor													{ $$ = FactorExpressionExpAction($1); }
 	;
 
-factor: constant												{ $$ = ConstantFactorExpAction($1); }
+factor: OPEN_PARENTHESIS expression CLOSE_PARENTHESIS			{ $$ = $2; }
+	| constant													{ $$ = ConstantFactorExpAction($1); }
 	| variable													{ $$ = VariableFactorExpAction($1); }
 	;
 
