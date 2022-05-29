@@ -55,7 +55,7 @@ void invalidVariableTypeInForLoop(ErrorManager* em, char * varName){
 
 void invalidSubOperation(ErrorManager* em){
     state.succeed = FALSE;
-    static char * msg = "The operation - is only defined over integers. The result was \"{undefined}\" due to an invalid type.";
+    static char * msg = "The operation - and / are only defined over integers. The result was \"{undefined}\" due to an invalid type.";
     char * nodeMsg = malloc(strlen(msg) + 1);
     strcpy(nodeMsg, msg);
     newErrorNode(em, INVALID_TYPE, nodeMsg);
@@ -64,6 +64,14 @@ void invalidSubOperation(ErrorManager* em){
 void invalidMulOperation(ErrorManager* em){
     state.succeed = FALSE;
     static char * msg = "The operation * cannot be applyed over tow strings. The result was \"{undefined}\" due to an invalid type.";
+    char * nodeMsg = malloc(strlen(msg) + 1);
+    strcpy(nodeMsg, msg);
+    newErrorNode(em, INVALID_TYPE, nodeMsg);
+}
+
+void divByZero(ErrorManager* em){
+    state.succeed = FALSE;
+    static char * msg = "Division by 0. The returned result was 0.";
     char * nodeMsg = malloc(strlen(msg) + 1);
     strcpy(nodeMsg, msg);
     newErrorNode(em, INVALID_TYPE, nodeMsg);

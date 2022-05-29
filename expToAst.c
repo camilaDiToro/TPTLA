@@ -165,6 +165,20 @@ ExpNode* MultiplicationExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
     return newExpNode(&notTwoStringsMode, &mulIntegers, &mulStringInt, -1, NULL, exp1, exp2);
 }
 
+int divIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
+    int den = expNode->right->evaluateInteger(symbolTable, expNode->right);
+    if(den == 0){
+        divByZero(state.errorManager);
+        return 0;
+    }
+    return expNode->left->evaluateInteger(symbolTable, expNode->left) / den;
+}
+
+ExpNode* DivisionExpressionExpAction(ExpNode* exp1, ExpNode* exp2){
+    printf("DivisionExpressionExpAction \n");
+    return newExpNode(&justIntegerMode, &divIntegers, NULL, -1, NULL, exp1, exp2);
+}
+
 /*************************************************************************************
 **                       FACTORS
 **************************************************************************************/

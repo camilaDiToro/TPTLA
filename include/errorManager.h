@@ -30,4 +30,6 @@ void freeErrorManager(ErrorManager* em);
 void invalidVariableTypeInForLoop(ErrorManager* em, char * varName);
 void invalidSubOperation(ErrorManager* em);
 void invalidMulOperation(ErrorManager* em);
+
+void divByZero(ErrorManager* em);
 #endif
