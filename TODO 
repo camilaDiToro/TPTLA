@@ -1,7 +1,5 @@
 0. Check why var can be absent in inrange for case
-1. Test some programs to check if the current code is working properly (keep in mind that by the moment we just have addition)
 2. Add methods for the other expressions
-3. Start developing for node and generic node
-4. Revise "generic node" naming
-5. Free the hole tree at the end -> implement free for each of the structures
+5. Free the hole tree at the end -> implement free for the fors
 6. Check forList, only strings!! It is not an ordinary array, it is a List<String>! 
+7. add args to variables
