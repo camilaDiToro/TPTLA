@@ -72,7 +72,7 @@ static void jsonIfToHTML(SymbolTable * table, void * node) {
     IfNode* ifn = (IfNode*)node;
     StringNode* cond = ifn->condition;
     char * condValue = stringNodeToString(table, cond);  
-    if(strcmp(condValue,"1") == 0) {
+    if(strcmp(condValue,"0") != 0) {
         genericToHTML(table, ifn->then);
     }
     else if (ifn->otherwise != NULL) {
