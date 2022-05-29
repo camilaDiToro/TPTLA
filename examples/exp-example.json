@@ -10,7 +10,16 @@
         },
         {
             "@type": "body",
-            "@content": "ni idea"
+            "@content": {
+                "@type": "@for",
+                "@var": "align",
+                "@in": ["left","right","center","justify"],
+                "@content": {
+                    "@type":"div",
+                    "align": "${align}",
+                    "@content":"I am a div and my alignment is ${align}."
+                }
+            }
         }
     ]
 }

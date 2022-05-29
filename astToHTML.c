@@ -18,17 +18,17 @@
 #define P(...) fprintf(output, ##__VA_ARGS__);
 FILE* output;
 
-static void stringToHTML(SymbolTable* table, void* node);
-static void arrayToHTML(SymbolTable* table, void* node);
-static void genericToHTML(SymbolTable* table, GenericNode* node);
-static void jsonIfToHTML(SymbolTable* table, void* node);
-static void readToHTML(SymbolTable* table, void* node);
+static void stringToHTML(SymbolTable* table, void* node, int align);
+static void arrayToHTML(SymbolTable* table, void* node, int align);
+static void genericToHTML(SymbolTable* table, GenericNode* node, int align);
+static void jsonIfToHTML(SymbolTable* table, void* node, int align);
+static void readToHTML(SymbolTable* table, void* node, int align);
 
-typedef void (*builderFunction)(SymbolTable* table, void* node);
+typedef void (*builderFunction)(SymbolTable* table, void* node, int align);
 
 void treeToHTML(GenericNode* program, FILE* file, SymbolTable* table) {
     output = file;
-    genericToHTML(table, program);
+    genericToHTML(table, program, -1);
 }
 
 static char* stringNodeToString(SymbolTable* table, StringNode* node) {
@@ -51,35 +51,43 @@ static char* stringNodeToString(SymbolTable* table, StringNode* node) {
     return buffer;
 }
 
-static void stringToHTML(SymbolTable* table, void* node) {
-    StringNode* s = (StringNode*)node;
-    while (s != NULL) {
-        P("%s", s->exp->evaluate(table, s->exp));
-        s = s->next;
+static void printAlignment(int align){
+    for(int i=0 ; i<align ; ++i){
+        P("  ");
     }
 }
 
-static void arrayToHTML(SymbolTable* table, void* node) {
+static void stringToHTML(SymbolTable* table, void* node, int align) {
+    StringNode* s = (StringNode*)node;
+    while (s != NULL) {
+        printAlignment(align);
+        P("%s", s->exp->evaluate(table, s->exp));
+        s = s->next;
+    }
+    P("\n");
+}
+
+static void arrayToHTML(SymbolTable* table, void* node, int align) {
     ArrayNode* a = (ArrayNode*)node;
     while (a != NULL) {
-        genericToHTML(table, a->json);
+        genericToHTML(table, a->json, align);
         a = a->next;
     }
 }
 
-static void jsonIfToHTML(SymbolTable* table, void* node) {
+static void jsonIfToHTML(SymbolTable* table, void* node, int align) {
     IfNode* ifn = (IfNode*)node;
     StringNode* cond = ifn->condition;
     char* condValue = stringNodeToString(table, cond);
     if (strcmp(condValue, "0") != 0) {
-        genericToHTML(table, ifn->then);
+        genericToHTML(table, ifn->then, align);
     } else if (ifn->otherwise != NULL) {
-        genericToHTML(table, ifn->otherwise);
+        genericToHTML(table, ifn->otherwise, align);
     }
     free(condValue);
 }
 
-static void readToHTML(SymbolTable* table, void* node) {
+static void readToHTML(SymbolTable* table, void* node, int align) {
     ReadNode* r = (ReadNode*)node;
     printf("Please enter a line:\n");
     char* line = NULL;
@@ -87,11 +95,11 @@ static void readToHTML(SymbolTable* table, void* node) {
     getline(&line, &len, stdin);
     line[strcspn(line, "\n")] = 0;
     addSymbolToTable(table, newSymbol(r->varName, line, STRING));
-    genericToHTML(table, r->content);
+    genericToHTML(table, r->content, align);
     free(line);
 }
 
-static void forInRangeToHTML(SymbolTable* table, void* node) {
+static void forInRangeToHTML(SymbolTable* table, void* node, int align) {
     ForInRangeNode* f = (ForInRangeNode*)node;
     int start = atoi(f->startEndWrapperNode->start->evaluate(table, f->startEndWrapperNode->start));
     int end = atoi(f->startEndWrapperNode->end->evaluate(table, f->startEndWrapperNode->end));
@@ -102,16 +110,16 @@ static void forInRangeToHTML(SymbolTable* table, void* node) {
         for (int i = start; i < end; i++) {
             free(entry->value);
             entry->value = itoa(i);
-            genericToHTML(table, f->content);
+            genericToHTML(table, f->content, align);
         }
     } else {
         for (int i = start; i < end; i++) {
-            genericToHTML(table, f->content);
+            genericToHTML(table, f->content, align);
         }
     }
 }
 
-static void forListToHTML(SymbolTable* table, void* node) {
+static void forListToHTML(SymbolTable* table, void* node, int align) {
     ForListNode* f = (ForListNode*)node;
     SymbolEntry* entry = newSymbol(f->varName, NULL, STRING); // TODO: Modify using TAD, no direct manipulation
     addSymbolToTable(table, entry);
@@ -120,7 +128,7 @@ static void forListToHTML(SymbolTable* table, void* node) {
         if (current->json->nodeType == STRING_NODE) {
             StringNode* str = (StringNode*)(current->json->node);
             entry->value = stringNodeToString(table, str);
-            genericToHTML(table, f->content);
+            genericToHTML(table, f->content, align);
             current = current->next;
             free(entry->value);
         } else {
@@ -130,10 +138,24 @@ static void forListToHTML(SymbolTable* table, void* node) {
     }
 }
 
-static void commonToHTML(SymbolTable* table, void* node) {
+static void attributesToHTML(SymbolTable* table, AttributeNode* node){
+    AttributeNode* aux = node;
+    while(aux!=NULL){
+        P(" %s=\"%s\" ", aux->attributeName->exp->evaluate(table, aux->attributeName->exp), aux->content->exp->evaluate(table, aux->content->exp));
+        aux = aux->next;
+    }
+}
+
+static void commonToHTML(SymbolTable* table, void* node, int align) {
     CommonNode* c = (CommonNode*)node;
-    P("Hi im a common node :) \n");
-    genericToHTML(table, c->content);
+    char * tag = c->tag->exp->evaluate(table, c->tag->exp);
+    printAlignment(align);
+    P("<%s", tag);
+    attributesToHTML(table, c->attributeList);
+    P(">\n");
+    genericToHTML(table, c->content, align+1);
+    printAlignment(align);
+    P("</%s>\n", tag)
 }
 
 static builderFunction buiders[] = {
@@ -146,10 +168,10 @@ static builderFunction buiders[] = {
     /* JSON_COMMON_NODE */          (builderFunction)commonToHTML
 };
 
-static void genericToHTML(SymbolTable* table, GenericNode* node) {
+static void genericToHTML(SymbolTable* table, GenericNode* node, int align) {
     table = newScope(table);
     printf("genericToHTML %d\n", node->nodeType);
     builderFunction builder = buiders[node->nodeType];
-    builder(table, node->node);
+    builder(table, node->node, align+1);
     table = deleteScope(table);
 }
