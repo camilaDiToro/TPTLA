@@ -70,7 +70,7 @@ SymbolType justIntegerMode(SymbolTable* symbolTable, struct ExpNode* expNode) {
 
 SymbolType notTwoStringsMode(SymbolTable* symbolTable, struct ExpNode* expNode) {
     int ans = expNode->left->getMode(symbolTable, expNode->left) + expNode->right->getMode(symbolTable, expNode->right);
-    if(ans == INVALID){
+    if (ans == INVALID) {
         invalidMulOperation(state.errorManager);
     }
     return ans;
@@ -84,7 +84,9 @@ char* evaluate(SymbolTable* symbolTable, struct ExpResultNode* expNode) {
     ExpNode* e = expNode->exp;
     SymbolType s = (e->getMode(symbolTable, e));
     if (s == STRING) {
-        expNode->cvalue = e->evaluateString(symbolTable, e);
+        char * ans = e->evaluateString(symbolTable, e);
+        expNode->cvalue = realloc(expNode->cvalue, strlen(ans) + 1);
+        strcpy(expNode->cvalue, ans);
     } else if (s == INT) {
         int ans = e->evaluateInteger(symbolTable, e);
         int length = snprintf(NULL, 0, "%d", ans);
@@ -135,20 +137,20 @@ ExpNode* SubtractionExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
 }
 
 char* mulStringInt(SymbolTable* symbolTable, ExpNode* expNode) {
-    char * s;
+    char* s;
     int value;
-    if(expNode->left->getMode(symbolTable, expNode->left) == INT){
+    if (expNode->left->getMode(symbolTable, expNode->left) == INT) {
         value = expNode->left->evaluateInteger(symbolTable, expNode->left);
         s = expNode->right->evaluateString(symbolTable, expNode->right);
-    }else{
+    } else {
         value = expNode->right->evaluateInteger(symbolTable, expNode->right);
         s = expNode->left->evaluateString(symbolTable, expNode->left);
     }
-    expNode->cvalue = realloc(expNode->cvalue, strlen(s)*value + 1);
-    
+    expNode->cvalue = realloc(expNode->cvalue, strlen(s) * value + 1);
+
     int i = 0;
-    for(int j=0 ; j<value ; ++j){
-        for(int k=0 ; s[k] ; ++k){
+    for (int j = 0; j < value; ++j) {
+        for (int k = 0; s[k]; ++k) {
             expNode->cvalue[i++] = s[k];
         }
     }
@@ -167,16 +169,38 @@ ExpNode* MultiplicationExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
 
 int divIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
     int den = expNode->right->evaluateInteger(symbolTable, expNode->right);
-    if(den == 0){
+    if (den == 0) {
         divByZero(state.errorManager);
         return 0;
     }
     return expNode->left->evaluateInteger(symbolTable, expNode->left) / den;
 }
 
-ExpNode* DivisionExpressionExpAction(ExpNode* exp1, ExpNode* exp2){
+ExpNode* DivisionExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
     printf("DivisionExpressionExpAction \n");
     return newExpNode(&justIntegerMode, &divIntegers, NULL, -1, NULL, exp1, exp2);
+}
+
+char* equalStrings(SymbolTable* symbolTable, ExpNode* expNode) {
+    char* left = expNode->left->evaluateString(symbolTable, expNode->left);
+    char* right = expNode->right->evaluateString(symbolTable, expNode->right);
+    expNode->cvalue = realloc(expNode->cvalue, 2);
+    expNode->cvalue[1] = 0;
+    if(strcmp(left, right) == 0){
+        expNode->cvalue[0] = '1';
+    }else{
+        expNode->cvalue[0] = '0';
+    }
+    return expNode->cvalue;
+}
+
+int equalIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
+    return expNode->left->evaluateInteger(symbolTable, expNode->left) == expNode->right->evaluateInteger(symbolTable, expNode->right);
+}
+
+ExpNode* EqualityExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
+    printf("DivisionExpressionExpAction \n");
+    return newExpNode(&orMode, &equalIntegers, &equalStrings, -1, NULL, exp1, exp2);
 }
 
 /*************************************************************************************
@@ -274,9 +298,9 @@ ExpResultNode* StringConstantExpAction(char* string) {
 void FreeExpResultNode(ExpResultNode* node) {
     if (node == NULL)
         return;
-    if (node->cvalue != NULL)
+    if (node->cvalue != NULL){
         free(node->cvalue);
-
+    }
     FreeExpNode(node->exp);
     free(node);
 }

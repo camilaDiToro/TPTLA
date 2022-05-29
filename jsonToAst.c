@@ -85,6 +85,8 @@ void FreeIfNode(IfNode* node){
         return;
     FreeStringNode(node->condition);
     FreeGenericNode(node->then);
-    FreeGenericNode(node->otherwise);
+    if(node->otherwise != NULL){
+        FreeGenericNode(node->otherwise);
+    }
     free(node);
 }

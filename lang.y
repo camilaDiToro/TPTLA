@@ -201,6 +201,7 @@ expression: expression ADD expression							{ $$ = AdditionExpressionExpAction($
 	| expression SUB expression									{ $$ = SubtractionExpressionExpAction($1, $3); }
 	| expression MUL expression									{ $$ = MultiplicationExpressionExpAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionExpAction($1, $3); }
+	| expression EQ expression									{ $$ = EqualityExpressionExpAction($1, $3); }
 	| factor													{ $$ = FactorExpressionExpAction($1); }
 	;
 

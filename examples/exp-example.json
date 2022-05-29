@@ -1,4 +1,13 @@
-[{"@type" : "@read",
- "@var" : "x",
- "@content":["${(5 / 3)}","---", "${(5 / 0)}","---", "${5/x}"]
-}]
+[{
+    "@type": "@if", 
+    "@condition": "${ argv[0] == argv[1] }", 
+    "@then": "hola ${argv[0]}, ${argv[1]}, ${argv[2]}, ${argv[3]}---------",
+    "@else": "chau ${argv[0]}, ${argv[1]}, ${argv[2]}, ${argv[3]}---------"
+},
+{
+    "@type": "@if", 
+    "@condition": "${ argv[2] == 1 }", 
+    "@then": "hola ${argv[0]}, ${argv[1]}, ${argv[2]}, ${argv[3]}---------",
+    "@else": "chau ${argv[0]}, ${argv[1]}, ${argv[2]}, ${argv[3]}---------"
+}
+]

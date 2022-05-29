@@ -78,6 +78,7 @@ static void jsonIfToHTML(SymbolTable * table, void * node) {
     else if (ifn->otherwise != NULL) {
         genericToHTML(table, ifn->otherwise);
     }
+    free(condValue);
 }
 
 static void readToHTML(SymbolTable * table, void * node){
