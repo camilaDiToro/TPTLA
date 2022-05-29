@@ -82,8 +82,6 @@ static void jsonIfToHTML(SymbolTable * table, void * node) {
 
 static void readToHTML(SymbolTable * table, void * node){
     ReadNode* r = (ReadNode*)node;
-    table = newScope(table);
-
     printf("Please enter a line:\n");
     char *line = NULL;
     size_t len = 0;
