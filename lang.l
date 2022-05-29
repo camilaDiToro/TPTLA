@@ -46,7 +46,7 @@ whitespace		[ \f\n\r\t\v]
 <MATH>"-"									{ return SUB; }
 <MATH>"*"									{ return MUL; }
 <MATH>"/"									{ return DIV; }
-<MATH>{alpha}{alphanumeric}*                { strcpy(yylval.string,yytext); return VAR; }
+<MATH>{alpha}{alphanumeric}*                { strcpy(yylval.basic_string,yytext); return VAR; }
 
 <MATH>"=="									{ return EQ; }
 <MATH>"!="									{ return NEQ; }
@@ -59,7 +59,7 @@ whitespace		[ \f\n\r\t\v]
 <MATH>"||"									{ return OR; }
 <MATH>"!"									{ return NOT; }
 
-<STRING>","                                 { strcpy(yylval.string,yytext); return CHARS; }
+<STRING>","                                 { strcpy(yylval.basic_string,yytext); return CHARS; }
 ","                                         { return COM; }
 
 <MATH>"("											{ return OPEN_PARENTHESIS; }
@@ -75,7 +75,7 @@ whitespace		[ \f\n\r\t\v]
 
 <MATH>{digit}+								{ yylval.integer = atoi(yytext); return INTEGER; }
 
-<STRING>({character}|{whitespace})+         { strcpy(yylval.string,yytext); return CHARS; }
+<STRING>({character}|{whitespace})+         { strcpy(yylval.basic_string,yytext); return CHARS; }
 
 <MATH,INITIAL>{whitespace}					{ }
 

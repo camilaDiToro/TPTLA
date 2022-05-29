@@ -7,46 +7,50 @@
 #include "include/basicTypeToAst.h"
 #include "include/jsonToAst.h"
 #include "include/shared.h"
+#include "include/commonToAst.h"
 
 // Extern prototypes
-
 extern FILE * out;
 
 %}
 
 %union {
-    char string[1024];
+    char basic_string[1024];
     int integer;
-    struct ExpNode * expNode;
-    struct ExpResultNode * expResultNode;
-	struct GenericNode * genericNode;
-	struct StringNode * stringNode;
-	struct ArrayNode * arrayNode;
-	struct IfNode * ifNode;
-	struct ReadNode * readNode;
-	struct ForInRangeNode * forInRangeNode;
-	struct ForListNode * forListNode; 
-	struct StartEndWrapperNode * startEndWrapperNode;
+    struct ExpNode* expNode;
+    struct ExpResultNode* expResultNode;
+	struct GenericNode* genericNode;
+	struct StringNode* stringNode;
+	struct ArrayNode* arrayNode;
+	struct IfNode* ifNode;
+	struct ReadNode* readNode;
+	struct ForInRangeNode* forInRangeNode;
+	struct ForListNode* forListNode; 
+	struct StartEndWrapperNode* startEndWrapperNode;
+	struct AttributeNode* attributeNode;
+	struct CommonNode* commonNode;
 }
 
 %type <expNode> constant factor variable expression
 %type <expResultNode> expression_result string_constant
 %type <genericNode> program json row_then row_else row_content
-%type <stringNode> string string_body row_condition 
+%type <stringNode> string string_body row_condition row_type
 %type <arrayNode> array array_body row_in
 %type <ifNode> json_if json_if_body
 %type <readNode> json_read json_read_body
 %type <forInRangeNode> json_for_in_range json_for_in_range_body
 %type <forListNode>	json_for_list
 %type <startEndWrapperNode> row_inrange
-%type <string> row_var
+%type <basic_string> row_var 
+%type <attributeNode> json_common_body
+%type <commonNode> json_common
 
 // IDs de los tokens generados desde Flex:
 %token ADD
 %token SUB
 %token MUL
 %token DIV
-%token <string> VAR
+%token <basic_string> VAR
 
 %token EQ
 %token NEQ
@@ -85,7 +89,7 @@ extern FILE * out;
 %token CLOSE_BRA
 
 %token <integer> INTEGER
-%token <string> CHARS
+%token <basic_string> CHARS
 
 %token START_MATH
 %token END_MATH
@@ -106,6 +110,7 @@ json: string																		{ printf("NewNodeGenericAction\n"); $$ = NewNodeGe
 	| json_read																		{ printf("JSON TYPE: Read\n"); 		$$ = NewNodeGenericAction((void*)$1, JSON_READ_NODE);}
 	| json_for_in_range																{ printf("JSON TYPE: ForInRange\n");$$ = NewNodeGenericAction((void*)$1, JSON_FOR_IN_RANGE_NODE); }
 	| json_for_list																	{ printf("JSON TYPE: ForList\n");   $$ = NewNodeGenericAction((void*)$1, JSON_FOR_LIST_NODE);}
+	| json_common										        					{ printf("JSON TYPE: Common\n"); 	$$ = NewNodeGenericAction((void*)$1, JSON_COMMON_NODE);}
 	;
 
 json_if: OPEN_CURL json_if_body	CLOSE_CURL											{ printf("JSON IF THEN \n"); 		$$ = $2;}
@@ -128,8 +133,16 @@ json_for_in_range_body: row_type_for COM row_var COM row_inrange COM row_content
 	|	row_type_for COM row_inrange COM row_content								{ printf("JSON FOR INRANGE BODY\n"); $$ = NewNodeJsonForInRangeAction($3, NULL, $5);}
 	;
 
-json_for_list: OPEN_CURL row_type_for COM row_var COM row_in COM row_content CLOSE_CURL  { printf("JSON FOR LIST\n"); $$ = NewNodeJsonForListAction($6, $4, $8);  }
+json_for_list: 	OPEN_CURL row_type_for COM 
+				row_var COM row_in COM row_content CLOSE_CURL  						{ printf("JSON FOR LIST\n"); 		$$ = NewNodeJsonForListAction($6, $4, $8);  }
+	;
 
+json_common: 	OPEN_CURL row_type json_common_body row_content CLOSE_CURL 			{ printf("JSON TYPE: Generic\n"); 	$$ = NewNodeJsonCommonAction($2,$3,$4);}		
+	;
+
+json_common_body: COM																{ printf("JSON ROW EMPTY\n"); 					$$ = NULL;}
+	|	COM string TPOINTS string json_common_body									{ printf("JSON ROW ENUMERATION\n"); 				$$ = newAttributeNode($2,$4,$5);}
+	; 
 
 /*************************************************************************************************************
 **                                            TIPOS DE FILAS (ROWs)
@@ -143,26 +156,29 @@ row_type_for: TAG_TYPE TPOINTS TAG_FOR							{ printf("JSON TYPE ROW FOR DETECTE
 row_type_read: TAG_TYPE TPOINTS TAG_READ						{ printf("JSON TYPE ROW FOR \n"); }
 	;
 
-row_condition: TAG_CONDITION TPOINTS string						{ printf("JSON CONDITION ROW\n"); 	$$ = $3;}
+row_type: TAG_TYPE TPOINTS string								{ printf("JSON TYPE ROW DETECTED \n"); 	$$ = $3;}				
 	;
 
-row_then: TAG_THEN TPOINTS json									{ printf("JSON THEN ROW\n"); 		$$ = $3;}
+row_condition: TAG_CONDITION TPOINTS string						{ printf("JSON CONDITION ROW\n"); 		$$ = $3;}
 	;
 
-row_else: TAG_ELSE TPOINTS json									{ printf("JSON ELSE ROW\n"); 		$$ = $3;}
+row_then: TAG_THEN TPOINTS json									{ printf("JSON THEN ROW\n"); 			$$ = $3;}
 	;
 
-row_var: TAG_VAR TPOINTS QUOTE CHARS QUOTE						{ printf("JSON VAR ROW \n"); 		strcpy($$,$4);}
+row_else: TAG_ELSE TPOINTS json									{ printf("JSON ELSE ROW\n"); 			$$ = $3;}
 	;
 
-row_content: TAG_CONTENT TPOINTS json							{ printf("JSON CONTENT ROW \n"); 	$$ = $3;}
+row_var: TAG_VAR TPOINTS QUOTE CHARS QUOTE						{ printf("JSON VAR ROW \n"); 			strcpy($$,$4);}
+	;
+
+row_content: TAG_CONTENT TPOINTS json							{ printf("JSON CONTENT ROW \n"); 		$$ = $3;}
 	;
 
 row_inrange: 	TAG_INRANGE TPOINTS OPEN_BRA QUOTE 
 				expression_result QUOTE COM QUOTE 
 				expression_result QUOTE CLOSE_BRA 				{ printf("JSON INRANGE ROW DETECTED\n");  $$ = NewStartEndWrapperNode($5, $9);}
 
-row_in: TAG_IN TPOINTS array									{ printf("JSON IN ROW DETECTED\n"); $$ = $3; }
+row_in: TAG_IN TPOINTS array									{ printf("JSON IN ROW DETECTED\n"); 	$$ = $3; }
 	;
 
 /*************************************************************************************************************

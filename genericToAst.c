@@ -1,6 +1,7 @@
 #include "include/genericToAst.h"
 #include "include/basicTypeToAst.h"
 #include "include/jsonToAst.h"
+#include "include/commonToAst.h"
 
 typedef void (*FreeNode)(void* node);
 
@@ -26,10 +27,12 @@ static FreeNode freeNode[] = {
         /* JSON_FOR_IN_RANGE_NODE */    (FreeNode)NULL,
         /* JSON_READ_NODE */            (FreeNode)FreeReadNode,
         /* JSON_FOR */                  (FreeNode)NULL,
-        /* JSON_GENERIC_NODE */         (FreeNode)NULL
+        /* JSON_COMMON_NODE */          (FreeNode)FreeCommonNode
 };
 
 void FreeGenericNode(GenericNode* node) {
+    if(node == NULL)
+        return;
     FreeNode freer = freeNode[node->nodeType];
     freer(node->node);
     free(node);

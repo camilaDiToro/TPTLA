@@ -1,13 +1,16 @@
-[{
-    "@type": "@if", 
-    "@condition": "${ argv[0] == argv[1] }", 
-    "@then": "hola ${argv[0]}, ${argv[1]}, ${argv[2]}, ${argv[3]}---------",
-    "@else": "chau ${argv[0]}, ${argv[1]}, ${argv[2]}, ${argv[3]}---------"
-},
 {
-    "@type": "@if", 
-    "@condition": "${ argv[2] == 1 }", 
-    "@then": "hola ${argv[0]}, ${argv[1]}, ${argv[2]}, ${argv[3]}---------",
-    "@else": "chau ${argv[0]}, ${argv[1]}, ${argv[2]}, ${argv[3]}---------"
+    "@type":"html",
+    "@content": [
+        {
+            "@type": "head",
+            "@content": {
+                "@type": "title",
+                "@content": "Div Align Attribute"     
+            }
+        },
+        {
+            "@type": "body",
+            "@content": "ni idea"
+        }
+    ]
 }
-]
