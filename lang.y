@@ -217,8 +217,15 @@ expression: expression ADD expression							{ $$ = AdditionExpressionExpAction($
 	| expression SUB expression									{ $$ = SubtractionExpressionExpAction($1, $3); }
 	| expression MUL expression									{ $$ = MultiplicationExpressionExpAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionExpAction($1, $3); }
-	| expression EQ expression									{ $$ = EqualityExpressionExpAction($1, $3); }
-	| expression NEQ expression									{ $$ = NequalityExpressionExpAction($1, $3); }
+	| expression EQ expression									{ $$ = BooleanExpressionExpAction($1, $3, EQUALITY); }
+	| expression NEQ expression									{ $$ = BooleanExpressionExpAction($1, $3, NEQUALITY); }
+	| expression LT expression									{ $$ = BooleanExpressionExpAction($1, $3, LESS); }
+	| expression LEQ expression									{ $$ = BooleanExpressionExpAction($1, $3, LESS_OR_EQUAL); }
+	| expression GT expression									{ $$ = BooleanExpressionExpAction($1, $3, GREATER); }
+	| expression GEQ expression									{ $$ = BooleanExpressionExpAction($1, $3, GREATER_OR_EQUAL); }
+	| expression AND expression									{ $$ = BooleanExpressionExpAction($1, $3, BOOLEAN_AND); }
+	| expression OR expression									{ $$ = BooleanExpressionExpAction($1, $3, BOOLEAN_OR); }
+	| NOT expression											{ $$ = NotExpressionExpAction($2); }
 	| factor													{ $$ = FactorExpressionExpAction($1); }
 	;
 

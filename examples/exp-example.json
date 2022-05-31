@@ -2,14 +2,14 @@
     "@type": "body",
     "@content": {
             "@type": "@if", 
-            "@condition": "${ 2 != 2 }", 
+            "@condition": "${ argv[2] && 1 }", 
             "@then": {
                 "@type": "h1",
-                "@content": "This text is being shown because both arguments are equal"
+                "@content": "true"
             }, 
             "@else": {
                 "@type": "h2", 
-                "@content": "This text is being shown because arguments are not equal"
+                "@content": "false"
         }
     }
 }

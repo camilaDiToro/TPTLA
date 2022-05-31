@@ -181,43 +181,6 @@ ExpNode* DivisionExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
     return newExpNode(&justIntegerMode, &divIntegers, NULL, -1, NULL, exp1, exp2);
 }
 
-char* equalStrings(SymbolTable* symbolTable, ExpNode* expNode) {
-    char* left = expNode->left->evaluateString(symbolTable, expNode->left);
-    char* right = expNode->right->evaluateString(symbolTable, expNode->right);
-    expNode->cvalue = realloc(expNode->cvalue, 2);
-    expNode->cvalue[1] = 0;
-    if(strcmp(left, right) == 0){
-        expNode->cvalue[0] = '1';
-    }else{
-        expNode->cvalue[0] = '0';
-    }
-    return expNode->cvalue;
-}
-
-int equalIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
-    return expNode->left->evaluateInteger(symbolTable, expNode->left) == expNode->right->evaluateInteger(symbolTable, expNode->right);
-}
-
-ExpNode* EqualityExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
-    printf("EqualityExpressionExpAction \n");
-    return newExpNode(&orMode, &equalIntegers, &equalStrings, -1, NULL, exp1, exp2);
-}
-
-char* nequalStrings(SymbolTable* symbolTable, ExpNode* expNode) {
-    equalStrings(symbolTable, expNode);
-    expNode->cvalue[0] = !expNode->cvalue[0];
-    return expNode->cvalue;
-}
-
-int nequalIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
-    return expNode->left->evaluateInteger(symbolTable, expNode->left) != expNode->right->evaluateInteger(symbolTable, expNode->right);
-}
-
-ExpNode* NequalityExpressionExpAction(ExpNode* exp1, ExpNode* exp2){
-    printf("EqualityExpressionExpAction \n");
-    return newExpNode(&orMode, &nequalIntegers, &nequalStrings, -1, NULL, exp1, exp2);
-}
-
 /*************************************************************************************
 **                       FACTORS
 **************************************************************************************/

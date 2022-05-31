@@ -26,6 +26,17 @@ typedef struct ExpResultNode{
 
 typedef char*       (*evaluateFunction)(SymbolTable* symbolTable, struct ExpResultNode * expNode);
 
+typedef enum BooleanExpType {
+    EQUALITY = 0,
+    NEQUALITY = 1,
+    LESS = 2, 
+    LESS_OR_EQUAL = 3, 
+    GREATER = 4, 
+    GREATER_OR_EQUAL = 5, 
+    BOOLEAN_NOT = 6,
+    BOOLEAN_AND = 7,
+    BOOLEAN_OR = 8
+} BooleanExpType;
 
 //Frees
 void FreeExpResultNode(ExpResultNode * node);
@@ -37,8 +48,8 @@ ExpNode* AdditionExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* SubtractionExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* MultiplicationExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* DivisionExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
-ExpNode* EqualityExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
-ExpNode* NequalityExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
+ExpNode* BooleanExpressionExpAction(ExpNode* exp1, ExpNode* exp2, BooleanExpType type);
+ExpNode* NotExpressionExpAction(ExpNode* exp1);
 ExpNode* FactorExpressionExpAction(ExpNode* factor);
 
 //Factor

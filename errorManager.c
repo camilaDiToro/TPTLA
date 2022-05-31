@@ -9,12 +9,6 @@ ErrorManager * newErrorManager(){
     return calloc(1,sizeof(ErrorManager));
 }
 
-/*typedef struct ErrorNode {
-    ErrorType type;
-    char* msg;
-    struct ErrorNode* next;
-} ErrorNode;*/
-
 static void newErrorNode(ErrorManager* em, ErrorType type, char * msg){
     ErrorNode * newNode = malloc(sizeof(ErrorNode));
     newNode->msg = msg;
@@ -55,7 +49,7 @@ void invalidVariableTypeInForLoop(ErrorManager* em, char * varName){
 
 void invalidSubOperation(ErrorManager* em){
     state.succeed = FALSE;
-    static char * msg = "The operation - and / are only defined over integers. The result was \"{undefined}\" due to an invalid type.";
+    static char * msg = "The operations -, /, &&, || and ! are only defined over integers. The result was \"{undefined}\" due to an invalid type.";
     char * nodeMsg = malloc(strlen(msg) + 1);
     strcpy(nodeMsg, msg);
     newErrorNode(em, INVALID_TYPE, nodeMsg);
