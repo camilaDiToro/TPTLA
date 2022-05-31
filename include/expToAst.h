@@ -38,6 +38,7 @@ ExpNode* SubtractionExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* MultiplicationExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* DivisionExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* EqualityExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
+ExpNode* NequalityExpressionExpAction(ExpNode* exp1, ExpNode* exp2);
 ExpNode* FactorExpressionExpAction(ExpNode* factor);
 
 //Factor

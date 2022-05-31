@@ -199,8 +199,23 @@ int equalIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
 }
 
 ExpNode* EqualityExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
-    printf("DivisionExpressionExpAction \n");
+    printf("EqualityExpressionExpAction \n");
     return newExpNode(&orMode, &equalIntegers, &equalStrings, -1, NULL, exp1, exp2);
+}
+
+char* nequalStrings(SymbolTable* symbolTable, ExpNode* expNode) {
+    equalStrings(symbolTable, expNode);
+    expNode->cvalue[0] = !expNode->cvalue[0];
+    return expNode->cvalue;
+}
+
+int nequalIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
+    return expNode->left->evaluateInteger(symbolTable, expNode->left) != expNode->right->evaluateInteger(symbolTable, expNode->right);
+}
+
+ExpNode* NequalityExpressionExpAction(ExpNode* exp1, ExpNode* exp2){
+    printf("EqualityExpressionExpAction \n");
+    return newExpNode(&orMode, &nequalIntegers, &nequalStrings, -1, NULL, exp1, exp2);
 }
 
 /*************************************************************************************

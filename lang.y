@@ -218,6 +218,7 @@ expression: expression ADD expression							{ $$ = AdditionExpressionExpAction($
 	| expression MUL expression									{ $$ = MultiplicationExpressionExpAction($1, $3); }
 	| expression DIV expression									{ $$ = DivisionExpressionExpAction($1, $3); }
 	| expression EQ expression									{ $$ = EqualityExpressionExpAction($1, $3); }
+	| expression NEQ expression									{ $$ = NequalityExpressionExpAction($1, $3); }
 	| factor													{ $$ = FactorExpressionExpAction($1); }
 	;
 
