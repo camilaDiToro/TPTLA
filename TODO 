@@ -1,5 +1,4 @@
 0. Check why var can be absent in inrange for case
-2. Add methods for the other expressions
 5. Free the hole tree at the end -> implement free for the fors
 6. Check forList, only strings!! It is not an ordinary array, it is a List<String>! 
 7. add args to variables

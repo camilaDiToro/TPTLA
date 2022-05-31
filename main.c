@@ -30,6 +30,8 @@ int main(int argc, char** argv) {
         sprintf(argument, "argv[%d]", i);
         addSymbolToTable(state.table, newSymbol(argument, argv[i], STRING));
     }
+    sprintf(argument, "%d", argc);
+    addSymbolToTable(state.table, newSymbol("argc", argument, INT));
 
     // Semantic evaluation and AST building
     printf("Compiling...\n");

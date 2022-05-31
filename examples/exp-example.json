@@ -2,7 +2,7 @@
     "@type": "body",
     "@content": {
             "@type": "@if", 
-            "@condition": "${ argv[2] && 1 }", 
+            "@condition": "${ argv[2] == argc }", 
             "@then": {
                 "@type": "h1",
                 "@content": "true"
