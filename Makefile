@@ -24,6 +24,7 @@ install: all
 	mv jtoh $(INSTALL_PATH)/jtoh
 	make clean
 	cp jtoh.1 /usr/local/man/man1/jtoh.1
+	alias jtoh="~/.jtoh/jtoh"
 
 uninstall: clean
 	rm -rf $(INSTALL_PATH) 

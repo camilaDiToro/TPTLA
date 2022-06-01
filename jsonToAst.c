@@ -104,8 +104,8 @@ void FreeForListNode(ForListNode * node){
 void FreeStartEndWrapperNode(StartEndWrapperNode * node){
     if(node == NULL)    
         return;
-    FreeExpNode(node->end);
-    FreeExpNode(node->start);
+    FreeExpResultNode(node->end);
+    FreeExpResultNode(node->start);
     free(node); 
 }
 
