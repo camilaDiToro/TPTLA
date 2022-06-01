@@ -129,7 +129,6 @@ static void forListToHTML(SymbolTable* table, void* node, int align) {
             StringNode* str = (StringNode*)(current->json->node);
             entry->value = stringNodeToString(table, str);
             genericToHTML(table, f->content, align);
-            current = current->next;
             free(entry->value);
         } else {
             invalidVariableTypeInForLoop(state.errorManager, f->varName);

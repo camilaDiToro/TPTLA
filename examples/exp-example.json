@@ -1,15 +1,14 @@
 {
     "@type": "body",
     "@content": {
-            "@type": "@if", 
-            "@condition": "${ argv[2] == argc }", 
-            "@then": {
-                "@type": "h1",
-                "@content": "true"
-            }, 
-            "@else": {
-                "@type": "h2", 
-                "@content": "false"
+        "@type": "@for",
+        "@var": "align",
+        "@in": ["right","center", {"@type": "asfa",
+            "@content":"asfa"},"justify", "nnnnnnnnn"],
+        "@content": {
+            "@type":"div",
+            "align": "${align}",
+            "@content":"I am a div and my alignment is ${align}."
         }
     }
 }

@@ -97,6 +97,7 @@ extern FILE * out;
 // Reglas de asociatividad y precedencia (de menor a mayor):
 %left ADD SUB
 %left MUL DIV
+%left EQ NEQ LT LEQ GT GEQ AND OR NOT
 
 
 %%
