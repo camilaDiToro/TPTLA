@@ -1,4 +1,4 @@
-CCFLAGS = -Wall -Wno-unused-function -std=c99 -g -Wdiv-by-zero -fsanitize=address 
+CCFLAGS = -Wall -Wno-unused-function -std=c99 -g -Wdiv-by-zero # -fsanitize=address 
 YLFLAGS = -lfl
 MACYLFLAGS = -ll
 SRC_FOLDER = .
@@ -6,6 +6,8 @@ SRC_FOLDER = .
 PARSER_OBJ = lex.yy.o y.tab.o
 PROGRAM_OBJ = program aux.c
 OBJ = lex.yy.c y.tab.c y.tab.h
+
+INSTALL_PATH = ~/.jtoh
 
 all: parser
 parser:
@@ -17,5 +19,14 @@ parser:
 clean: 
 	rm -rf $(PARSER_OBJ) $(PROGRAM_OBJ) $(OBJ) jtoh
 
+install: all
+	mkdir -p $(INSTALL_PATH) 
+	mv jtoh $(INSTALL_PATH)/jtoh
+	make clean
+	cp jtoh.1 /usr/local/man/man1/jtoh.1
+
+uninstall: clean
+	rm -rf $(INSTALL_PATH) 
+	rm /usr/local/man/man1/jtoh.1
 
 PHONY = all clean
