@@ -47,4 +47,7 @@ ForListNode * NewNodeJsonForListAction(ArrayNode * arrayNode, char * varName, Ge
 void FreeReadNode(ReadNode* node);
 void FreeIfNode(IfNode* node);
 
+void FreeForListNode(ForListNode * node); 
+void FreeStartEndWrapperNode(StartEndWrapperNode * node);
+void FreeForInRangeNode(ForInRangeNode * node); 
 #endif

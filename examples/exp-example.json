@@ -3,8 +3,7 @@
     "@content": {
         "@type": "@for",
         "@var": "align",
-        "@in": ["right","center", {"@type": "asfa",
-            "@content":"asfa"},"justify", "nnnnnnnnn"],
+        "@in": ["right","center","justify", "nnnnnnnnn"],
         "@content": {
             "@type":"div",
             "align": "${align}",

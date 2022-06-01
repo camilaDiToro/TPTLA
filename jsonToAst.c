@@ -90,3 +90,30 @@ void FreeIfNode(IfNode* node){
     }
     free(node);
 }
+
+void FreeForListNode(ForListNode * node){
+    if(node == NULL)    
+        return;
+    FreeGenericNode(node->content);
+    FreeArrayNode(node->list); 
+    if (node->varName != NULL)
+        free(node->varName); 
+    free(node);
+}
+
+void FreeStartEndWrapperNode(StartEndWrapperNode * node){
+    if(node == NULL)    
+        return;
+    free(node);
+}
+
+void FreeForInRangeNode(ForInRangeNode * node){
+    if(node == NULL)    
+        return;
+    if (node->varName != NULL)
+        free(node->varName); 
+    FreeStartEndWrapperNode(node->startEndWrapperNode); 
+    FreeGenericNode(node->content); 
+    free(node);
+}
+

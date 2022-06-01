@@ -24,9 +24,9 @@ static FreeNode freeNode[] = {
         /* STRING_NODE */               (FreeNode)FreeStringNode,
         /* ARRAY_NODE */                (FreeNode)FreeArrayNode,
         /* JSON_IF_NODE */              (FreeNode)FreeIfNode,
-        /* JSON_FOR_IN_RANGE_NODE */    (FreeNode)NULL,
+        /* JSON_FOR_IN_RANGE_NODE */    (FreeNode)FreeForInRangeNode,
         /* JSON_READ_NODE */            (FreeNode)FreeReadNode,
-        /* JSON_FOR */                  (FreeNode)NULL,
+        /* JSON_FOR_LIST_NODE */        (FreeNode)FreeForListNode,
         /* JSON_COMMON_NODE */          (FreeNode)FreeCommonNode
 };
 
