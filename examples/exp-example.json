@@ -1,12 +1,12 @@
 {
-    "@type": "body",
+    " @type": "body",
     "@content": {
         "@type": "@for",
         "@var": "align",
         "@in": ["right","center","justify", "nnnnnnnnn"],
         "@content": {
             "@type":"div",
-            "align": "${align}",
+            "   align": "${align}",
             "@content":"I am a div and my alignment is ${align}."
         }
     }

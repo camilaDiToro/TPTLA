@@ -26,59 +26,59 @@ whitespace		[ \f\n\r\t\v]
 
 %%
 
-<STRING>"${"                                {BEGIN(MATH); return START_MATH;}
-<MATH>"}"                                   {BEGIN(STRING); return END_MATH;}
+<STRING>"${"                                    {BEGIN(MATH); return START_MATH;}
+<MATH>"}"                                       {BEGIN(STRING); return END_MATH;}
 
-":"                                         { return TPOINTS; }
-"\"@type\""                                 { return TAG_TYPE; }
-"\"@content\""                              { return TAG_CONTENT; }
-"\"@if\""                                   { return TAG_IF; }
-"\"@condition\""                            { return TAG_CONDITION; }
-"\"@then\""                                 { return TAG_THEN; }
-"\"@else\""                                 { return TAG_ELSE; }
-"\"@for\""                                  { return TAG_FOR; }
-"\"@var\""                                  { return TAG_VAR; }
-"\"@in\""                                   { return TAG_IN; }
-"\"@read\""                                 { return TAG_READ; }
-"\"@inrange\""                              { return TAG_INRANGE; }
+":"                                             { return TPOINTS; }
+"\""{whitespace}*"@type"{whitespace}*"\""       { return TAG_TYPE; }
+"\""{whitespace}*"@content"{whitespace}*"\""    { return TAG_CONTENT; }
+"\""{whitespace}*"@if"{whitespace}*"\""         { return TAG_IF; }
+"\""{whitespace}*"@condition"{whitespace}*"\""  { return TAG_CONDITION; }
+"\""{whitespace}*"@then"{whitespace}*"\""       { return TAG_THEN; }
+"\""{whitespace}*"@else"{whitespace}*"\""       { return TAG_ELSE; }
+"\""{whitespace}*"@for"{whitespace}*"\""        { return TAG_FOR; }
+"\""{whitespace}*"@var"{whitespace}*"\""        { return TAG_VAR; }
+"\""{whitespace}*"@in"{whitespace}*"\""         { return TAG_IN; }
+"\""{whitespace}*"@read"{whitespace}*"\""       { return TAG_READ; }
+"\""{whitespace}*"@inrange"{whitespace}*"\""    { return TAG_INRANGE; }
 
-<MATH>"+"									{ return ADD; }
-<MATH>"-"									{ return SUB; }
-<MATH>"*"									{ return MUL; }
-<MATH>"/"									{ return DIV; }
-<MATH>{alpha}{alphanumeric}*                { strcpy(yylval.basic_string,yytext); return VAR; }
+<MATH>"+"									    { return ADD; }
+<MATH>"-"									    { return SUB; }
+<MATH>"*"									    { return MUL; }
+<MATH>"/"									    { return DIV; }
+<MATH>{alpha}{alphanumeric}*                    { strcpy(yylval.basic_string,yytext); return VAR; }
 
-<MATH>"=="									{ return EQ; }
-<MATH>"!="									{ return NEQ; }
-<MATH>"<"									{ return LT; }
-<MATH>"<="									{ return LEQ; }
-<MATH>">"									{ return GT; }
-<MATH>">="									{ return GEQ; }
+<MATH>"=="									    { return EQ; }
+<MATH>"!="									    { return NEQ; }
+<MATH>"<"									    { return LT; }
+<MATH>"<="									    { return LEQ; }
+<MATH>">"									    { return GT; }
+<MATH>">="									    { return GEQ; }
 
-<MATH>"&&"									{ return AND; }
-<MATH>"||"									{ return OR; }
-<MATH>"!"									{ return NOT; }
+<MATH>"&&"									    { return AND; }
+<MATH>"||"									    { return OR; }
+<MATH>"!"									    { return NOT; }
 
-<STRING>","                                 { strcpy(yylval.basic_string,yytext); return CHARS; }
-","                                         { return COM; }
+<STRING>","                                     { strcpy(yylval.basic_string,yytext); return CHARS; }
+","                                             { return COM; }
 
-<MATH>"("									{ return OPEN_PARENTHESIS; }
-<MATH>")"									{ return CLOSE_PARENTHESIS; }
-"{"											{ return OPEN_CURL; }
-"}"											{ return CLOSE_CURL; }
-"["                                         { return OPEN_BRA; }
-"]"                                         { return CLOSE_BRA; }
+<MATH>"("									    { return OPEN_PARENTHESIS; }
+<MATH>")"									    { return CLOSE_PARENTHESIS; }
+"{"											    { return OPEN_CURL; }
+"}"											    { return CLOSE_CURL; }
+"["                                             { return OPEN_BRA; }
+"]"                                             { return CLOSE_BRA; }
 
-<INITIAL>"\""                               { BEGIN(STRING); return QUOTE;  }
-<STRING>"\""                                { BEGIN(INITIAL); return QUOTE;  }
+<INITIAL>"\""                                   { BEGIN(STRING); return QUOTE;  }
+<STRING>"\""                                    { BEGIN(INITIAL); return QUOTE;  }
 
 
-<MATH>{digit}+								{ yylval.integer = atoi(yytext); return INTEGER; }
+<MATH>{digit}+								    { yylval.integer = atoi(yytext); return INTEGER; }
 
-<STRING>({character}|{whitespace})+         { strcpy(yylval.basic_string,yytext); return CHARS; }
+<STRING>({character}|{whitespace})+             { strcpy(yylval.basic_string,yytext); return CHARS; }
 
-<MATH,INITIAL>{whitespace}					{ }
+<MATH,INITIAL>{whitespace}					    { }
 
-.											{ return yytext[0]; }
+.											    { return yytext[0]; }
 
 %%
