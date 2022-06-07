@@ -8,3 +8,6 @@ program
 *.dSYM
 .idea
 out.html
+workspace.code-workspace
+testingScripts.txt
+check

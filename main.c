@@ -89,7 +89,7 @@ void generator(void) {
     fprintf(yyout, "<!DOCTYPE html>\n");
 
     treeToHTML(state.program, yyout, state.table);
-    //FreeGenericNode(state.program);
+    FreeGenericNode(state.program);
     deleteScope(state.table);
     fclose(yyout);
 }

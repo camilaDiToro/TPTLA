@@ -47,7 +47,13 @@ static char* stringNodeToString(SymbolTable* table, StringNode* node) {
         for (int j = 0; returned[j]; j++) {
             if (i >= bufferSize) {
                 bufferSize *= 2;
-                buffer = realloc(buffer, bufferSize);
+                char* aux = realloc(buffer, bufferSize);
+                if(aux == NULL){
+                    outOfMemory(state.errorManager);
+                    return buffer;
+                }else{
+                    aux = buffer;
+                }
             }
             buffer[i++] = returned[j];
         }
@@ -171,5 +177,5 @@ static void genericToHTML(SymbolTable* table, GenericNode* node, int align) {
     printf("genericToHTML %d\n", node->nodeType);
     builderFunction builder = buiders[node->nodeType];
     builder(table, node->node, align+1);
-    table = deleteScope(table);
+    deleteScope(table);
 }

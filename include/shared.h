@@ -13,7 +13,7 @@ extern FILE * yyin;
 extern FILE * yyout;
 extern int yylineno;
 extern char * yytext;
-extern void yyerror(char * string);
+extern void yyerror(char* err_msg);
 extern int yylex(void);
 extern char *optarg;
 extern int optind, opterr, optopt;

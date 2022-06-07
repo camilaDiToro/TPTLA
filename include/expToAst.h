@@ -53,8 +53,8 @@ ExpNode* NotExpressionExpAction(ExpNode* exp1);
 ExpNode* FactorExpressionExpAction(ExpNode* factor);
 
 //Factor
-ExpNode* ConstantFactorExpAction(ExpNode * node);
-ExpNode* VariableFactorExpAction(ExpNode * node);
+ExpNode* ConstantFactorExpAction(ExpNode * expNode);
+ExpNode* VariableFactorExpAction(ExpNode * expNode);
 
 //Variable
 ExpNode* VariableSubscriptExpAction(char * varName, int index);

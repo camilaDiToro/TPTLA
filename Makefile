@@ -1,4 +1,4 @@
-CCFLAGS = -Wall -Wno-unused-function -std=c99 -g -Wdiv-by-zero # -fsanitize=address 
+CCFLAGS = -Wall -Wno-unused-function -std=c99 -g -Wdiv-by-zero -fsanitize=address 
 YLFLAGS = -lfl
 MACYLFLAGS = -ll
 SRC_FOLDER = .
@@ -34,4 +34,9 @@ uninstall: clean
 	rm -rf $(INSTALL_PATH) 
 	rm /usr/local/man/man1/jtoh.1
 
-PHONY = all clean
+
+check:
+	mkdir check
+	cppcheck --quiet --enable=all --force --inconclusive . 2> ./check/cppout.txt
+
+PHONY = all clean check
