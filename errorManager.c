@@ -7,7 +7,9 @@
 #include <stdio.h>
 #include <string.h>
 
-
+static void newErrorNode(ErrorManager* em, ErrorType type, char * msg, printErrorFunction errorFunction);
+static void printError(int errorNumber, ErrorNode* node);
+static void printErrorVaraible(int errorNumber, ErrorNode* node);
 
 ErrorManager * newErrorManager(){
     return calloc(1,sizeof(ErrorManager));

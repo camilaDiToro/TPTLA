@@ -29,6 +29,7 @@ typedef struct ErrorManager {
 typedef void (*printErrorFunction)(int errorNumber, ErrorNode* aux);
 
 ErrorManager* newErrorManager();
+
 void addUndefindedVariable(ErrorManager* em, char* varName);
 void* outOfMemory(ErrorManager* em);
 void showErrors(ErrorManager* em);
@@ -36,6 +37,6 @@ void freeErrorManager(ErrorManager* em);
 void invalidVariableTypeInForLoop(ErrorManager* em, char * varName);
 void invalidSubOperation(ErrorManager* em);
 void invalidMulOperation(ErrorManager* em);
-
 void divByZero(ErrorManager* em);
+
 #endif
