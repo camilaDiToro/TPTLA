@@ -162,7 +162,7 @@ static void attributesToHTML(SymbolTable* table, AttributeNode* node){
 }
 
 static void commonToHTML(SymbolTable* table, CommonNode* node, int align) {
-    char * tag = node->tag->exp->evaluate(table, node->tag->exp);
+    char * tag = stringNodeToString(table, node->tag);
     printAlignment(align);
     P("<%s", tag);
     attributesToHTML(table, node->attributeList);
@@ -170,6 +170,7 @@ static void commonToHTML(SymbolTable* table, CommonNode* node, int align) {
     genericToHTML(table, node->content, align+1);
     printAlignment(align);
     P("</%s>\n", tag)
+    free(tag);
 }
 
 static builderFunction buiders[] = {
