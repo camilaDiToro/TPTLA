@@ -8,11 +8,12 @@
 #include <string.h>
 
 
+
 ErrorManager * newErrorManager(){
     return calloc(1,sizeof(ErrorManager));
 }
 
-static void newErrorNode(ErrorManager* em, ErrorType type, char * msg){
+static void newErrorNode(ErrorManager* em, ErrorType type, char * msg, printErrorFunction errorFunction){
     ErrorNode * newNode = malloc(sizeof(ErrorNode));
     if(newNode == NULL){
         outOfMemory(em);
@@ -21,6 +22,7 @@ static void newErrorNode(ErrorManager* em, ErrorType type, char * msg){
     newNode->msg = msg;
     newNode->type = type;
     newNode->next = NULL;
+    newNode->printError = errorFunction;
 
     if(em->first == NULL){
         em->first = newNode;
@@ -31,16 +33,31 @@ static void newErrorNode(ErrorManager* em, ErrorType type, char * msg){
     em->errorCount += 1;
 }
 
+static void printError(int errorNumber, ErrorNode* node){
+    static char* messages[] = { "Invalid type inside the array of a for loop. You can only iterate through strings. Ommited iteration.",
+                                "Division by 0. The returned result was 0.",
+                                "The operation * cannot be applyed over tow strings. The result was \"{undefined}\" due to an invalid type.",
+                                "The operations -, /, &&, || and ! are only defined over integers. The result was \"{undefined}\" due to an invalid type."
+                              };
+    
+    printf("[Error %i]: %s \n", errorNumber, messages[node->type]);
+    return;
+}
+
+static void printErrorVaraible(int errorNumber, ErrorNode* node){
+    printf("[Error %i]: Undefined reference to variable \"%s\". \n", errorNumber, node->msg);
+    return;
+}
+
 void addUndefindedVariable(ErrorManager* em, char * varName){
     state.succeed = FALSE;
-    static char * msg = "Undefined reference to variable \"%s\".";
-    char * nodeMsg = malloc(strlen(msg) + strlen(varName) + 1);
+    char * nodeMsg = malloc(strlen(varName) + 1);
     if(nodeMsg == NULL){
         outOfMemory(em);
         return;
     }
-    sprintf(nodeMsg, msg, varName);
-    newErrorNode(em, UNDEFINED_VAR, nodeMsg);
+    strcpy(nodeMsg,varName);
+    newErrorNode(em, UNDEFINED_VAR, nodeMsg, printErrorVaraible);
 }
 
 void* outOfMemory(ErrorManager* em){
@@ -52,50 +69,22 @@ void* outOfMemory(ErrorManager* em){
 
 void invalidVariableTypeInForLoop(ErrorManager* em, char * varName){
     state.succeed = FALSE;
-    static char * msg = "Invalid type inside the array of a for loop. You can only iterate through strings. Ommited iteration.";
-    char * nodeMsg = malloc(strlen(msg) + 1);
-    if(nodeMsg == NULL){
-        outOfMemory(em);
-        return;
-    }
-    strcpy(nodeMsg, msg);
-    newErrorNode(em, INVALID_TYPE, nodeMsg);
+    newErrorNode(em, INVALID_TYPE_FOR_LOOP, NULL, printError);
 }
 
 void invalidSubOperation(ErrorManager* em){
     state.succeed = FALSE;
-    static char * msg = "The operations -, /, &&, || and ! are only defined over integers. The result was \"{undefined}\" due to an invalid type.";
-    char * nodeMsg = malloc(strlen(msg) + 1);
-    if(nodeMsg == NULL){
-        outOfMemory(em);
-        return;
-    }
-    strcpy(nodeMsg, msg);
-    newErrorNode(em, INVALID_TYPE, nodeMsg);
+    newErrorNode(em, INVALID_TYPE_JUST_INTEGER, NULL, printError);
 }
 
 void invalidMulOperation(ErrorManager* em){
     state.succeed = FALSE;
-    static char * msg = "The operation * cannot be applyed over tow strings. The result was \"{undefined}\" due to an invalid type.";
-    char * nodeMsg = malloc(strlen(msg) + 1);
-    if(nodeMsg == NULL){
-        outOfMemory(em);
-        return;
-    }
-    strcpy(nodeMsg, msg);
-    newErrorNode(em, INVALID_TYPE, nodeMsg);
+    newErrorNode(em, INVALID_TYPE_TWO_STRINGS, NULL, printError);
 }
 
 void divByZero(ErrorManager* em){
     state.succeed = FALSE;
-    static char * msg = "Division by 0. The returned result was 0.";
-    char * nodeMsg = malloc(strlen(msg) + 1);
-    if(nodeMsg == NULL){
-        outOfMemory(em);
-        return;
-    }
-    strcpy(nodeMsg, msg);
-    newErrorNode(em, INVALID_TYPE, nodeMsg);
+    newErrorNode(em, DIV_BY_ZERO, NULL, printError);
 }
 
 void showErrors(ErrorManager* em){
@@ -109,7 +98,7 @@ void showErrors(ErrorManager* em){
     
     ErrorNode * aux = em->first;
     for(int i=1 ; aux!=NULL ; ++i){
-        printf("[Error %i]: %s \n", i, aux->msg);
+        aux->printError(i,aux);
         aux = aux->next;
     }
 }
@@ -118,7 +107,8 @@ void freeErrorManager(ErrorManager* em){
     ErrorNode * en = em->first;
     while(en!=NULL){
         ErrorNode * aux = en->next;
-        free(en->msg);
+        if(en->msg!=NULL)
+            free(en->msg);
         free(en);
         en = aux;
     }
