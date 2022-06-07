@@ -13,13 +13,15 @@ extern int reduced;
 
 %option yylineno
 
-crlf			\r\n
-digit			[0-9]
-endline			\n
-alpha           [a-zA-Z]
-alphanumeric    [a-zA-Z0-9]
-character       [^\f\n\r\t\v\"$]|\\\\$|\\\"
-whitespace		[ \f\n\r\t\v]
+crlf			    \r\n
+digit			    [0-9]
+endline			    \n
+alpha               [a-zA-Z]
+alphanumeric        [a-zA-Z0-9]
+character           [^\f\n\r\t\v\"$\\]
+specialCharacter    \\\\$|\\\"|\\\\
+specialWhitespace   \\f|\\n|\\r|\\t|\\v
+whitespace		    [ \f\n\r\t\v]
 
 %s STRING
 %s MATH
@@ -75,7 +77,9 @@ whitespace		[ \f\n\r\t\v]
 
 <MATH>{digit}+								    { yylval.integer = atoi(yytext); return INTEGER; }
 
-<STRING>({character}|{whitespace})+             { strcpy(yylval.basic_string,yytext); return CHARS; }
+<STRING>({character}|{whitespace})+             { printf("c: %s \n", yytext); strcpy(yylval.basic_string,yytext); return CHARS; }
+<STRING>({specialCharacter})                    { printf("s: %s \n", yytext); strcpy(yylval.basic_string,yytext); return CHARS; }
+<STRING>({specialWhitespace})                   { printf("w: %s \n", yytext); strcpy(yylval.basic_string,yytext); return CHARS; }
 
 <MATH,INITIAL>{whitespace}					    { }
 
