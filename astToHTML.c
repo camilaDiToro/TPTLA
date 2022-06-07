@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #define _GNU_SOURCE
 #include "include/astToHTML.h"
 #include "include/basicTypeToAst.h"
@@ -40,6 +43,10 @@ void treeToHTML(GenericNode* program, FILE* file, SymbolTable* table) {
 static char* stringNodeToString(SymbolTable* table, StringNode* node) {
     int bufferSize = 10;
     char* buffer = malloc(bufferSize);
+    if(buffer == NULL){
+        outOfMemory(state.errorManager);
+        return buffer;
+    }
     int i = 0;
     StringNode* s = node;
     while (s != NULL) {
@@ -52,7 +59,7 @@ static char* stringNodeToString(SymbolTable* table, StringNode* node) {
                     outOfMemory(state.errorManager);
                     return buffer;
                 }else{
-                    aux = buffer;
+                    buffer = aux;
                 }
             }
             buffer[i++] = returned[j];
@@ -88,6 +95,9 @@ static void arrayToHTML(SymbolTable* table, ArrayNode* node, int align) {
 static void jsonIfToHTML(SymbolTable* table, IfNode* node, int align) {
     StringNode* cond = node->condition;
     char* condValue = stringNodeToString(table, cond);
+    if(condValue == NULL){
+        return;
+    }
     if (strcmp(condValue, "0") != 0) {
         genericToHTML(table, node->then, align);
     } else if (node->otherwise != NULL) {

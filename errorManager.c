@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include "include/errorManager.h"
 #include "include/shared.h"
 #include <stdlib.h>
@@ -11,6 +14,10 @@ ErrorManager * newErrorManager(){
 
 static void newErrorNode(ErrorManager* em, ErrorType type, char * msg){
     ErrorNode * newNode = malloc(sizeof(ErrorNode));
+    if(newNode == NULL){
+        outOfMemory(em);
+        return;
+    }
     newNode->msg = msg;
     newNode->type = type;
     newNode->next = NULL;
@@ -28,6 +35,10 @@ void addUndefindedVariable(ErrorManager* em, char * varName){
     state.succeed = FALSE;
     static char * msg = "Undefined reference to variable \"%s\".";
     char * nodeMsg = malloc(strlen(msg) + strlen(varName) + 1);
+    if(nodeMsg == NULL){
+        outOfMemory(em);
+        return;
+    }
     sprintf(nodeMsg, msg, varName);
     newErrorNode(em, UNDEFINED_VAR, nodeMsg);
 }
@@ -43,6 +54,10 @@ void invalidVariableTypeInForLoop(ErrorManager* em, char * varName){
     state.succeed = FALSE;
     static char * msg = "Invalid type inside the array of a for loop. You can only iterate through strings. Ommited iteration.";
     char * nodeMsg = malloc(strlen(msg) + 1);
+    if(nodeMsg == NULL){
+        outOfMemory(em);
+        return;
+    }
     strcpy(nodeMsg, msg);
     newErrorNode(em, INVALID_TYPE, nodeMsg);
 }
@@ -51,6 +66,10 @@ void invalidSubOperation(ErrorManager* em){
     state.succeed = FALSE;
     static char * msg = "The operations -, /, &&, || and ! are only defined over integers. The result was \"{undefined}\" due to an invalid type.";
     char * nodeMsg = malloc(strlen(msg) + 1);
+    if(nodeMsg == NULL){
+        outOfMemory(em);
+        return;
+    }
     strcpy(nodeMsg, msg);
     newErrorNode(em, INVALID_TYPE, nodeMsg);
 }
@@ -59,6 +78,10 @@ void invalidMulOperation(ErrorManager* em){
     state.succeed = FALSE;
     static char * msg = "The operation * cannot be applyed over tow strings. The result was \"{undefined}\" due to an invalid type.";
     char * nodeMsg = malloc(strlen(msg) + 1);
+    if(nodeMsg == NULL){
+        outOfMemory(em);
+        return;
+    }
     strcpy(nodeMsg, msg);
     newErrorNode(em, INVALID_TYPE, nodeMsg);
 }
@@ -67,6 +90,10 @@ void divByZero(ErrorManager* em){
     state.succeed = FALSE;
     static char * msg = "Division by 0. The returned result was 0.";
     char * nodeMsg = malloc(strlen(msg) + 1);
+    if(nodeMsg == NULL){
+        outOfMemory(em);
+        return;
+    }
     strcpy(nodeMsg, msg);
     newErrorNode(em, INVALID_TYPE, nodeMsg);
 }

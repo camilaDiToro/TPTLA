@@ -1,10 +1,22 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include "./include/symbolTable.h"
+#include "./include/shared.h"
 
 // Pure, simple, symbol manipulation
-
 SymbolEntry* newSymbol(char* name, char* value, SymbolType type) {
     SymbolEntry* entry = malloc(sizeof(SymbolEntry));
+    if(entry == NULL){
+        outOfMemory(state.errorManager);
+        return NULL;
+    }
     entry->key = malloc(strlen(name) + 1);
+    if(entry->key == NULL){
+        free(entry);
+        outOfMemory(state.errorManager);
+        return NULL;
+    }
     strcpy(entry->key, name);
     entry->value = value;
     entry->type = type;
@@ -56,6 +68,11 @@ void deleteSymbolEntryList(SymbolEntry* entry) {
 
 SymbolTable* newScope(SymbolTable* previousTable) {
     SymbolTable* table = malloc(sizeof(SymbolTable));
+    if(table == NULL){
+        outOfMemory(state.errorManager);
+        return NULL;
+    }
+    
     table->top = NULL;
     table->previousTable = previousTable;
     return table;

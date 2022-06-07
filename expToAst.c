@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include "./include/expToAst.h"
 #include "./include/shared.h"
 #include <stdio.h>
@@ -85,16 +88,34 @@ char* evaluate(SymbolTable* symbolTable, struct ExpResultNode* expNode) {
     SymbolType s = (e->getMode(symbolTable, e));
     if (s == STRING) {
         char * ans = e->evaluateString(symbolTable, e);
-        expNode->cvalue = realloc(expNode->cvalue, strlen(ans) + 1);
+        char* aux = realloc(expNode->cvalue, strlen(ans) + 1);
+        if(aux == NULL){
+            outOfMemory(state.errorManager);
+            return expNode->cvalue;
+        }else{
+            expNode->cvalue = aux;
+        }
         strcpy(expNode->cvalue, ans);
     } else if (s == INT) {
         int ans = e->evaluateInteger(symbolTable, e);
         int length = snprintf(NULL, 0, "%d", ans);
-        expNode->cvalue = realloc(expNode->cvalue, length + 1);
+        char* aux = realloc(expNode->cvalue, length + 1);
+        if(aux == NULL){
+            outOfMemory(state.errorManager);
+            return expNode->cvalue;
+        }else{
+            expNode->cvalue = aux;
+        }
         snprintf(expNode->cvalue, length + 1, "%d", ans);
     } else {
         char* msg = "{undefined}";
-        expNode->cvalue = realloc(expNode->cvalue, strlen(msg) + 1);
+        char* aux = realloc(expNode->cvalue, strlen(msg) + 1);
+        if(aux == NULL){
+            outOfMemory(state.errorManager);
+            return expNode->cvalue;
+        }else{
+            expNode->cvalue = aux;
+        }
         strcpy(expNode->cvalue, msg);
     }
     return expNode->cvalue;
@@ -115,7 +136,13 @@ int addIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
 char* concatStrigns(SymbolTable* symbolTable, ExpNode* expNode) {
     char* left = expNode->left->evaluateString(symbolTable, expNode->left);
     char* right = expNode->right->evaluateString(symbolTable, expNode->right);
-    expNode->cvalue = realloc(expNode->cvalue, strlen(left) + strlen(right) + 1);
+    char* aux = realloc(expNode->cvalue, strlen(left) + strlen(right) + 1);
+    if(aux == NULL){
+        outOfMemory(state.errorManager);
+        return expNode->cvalue;
+    }else{
+        expNode->cvalue = aux;
+    }
     expNode->cvalue[0] = 0;
     strcat(expNode->cvalue, left);
     strcat(expNode->cvalue, right);
@@ -146,7 +173,13 @@ char* mulStringInt(SymbolTable* symbolTable, ExpNode* expNode) {
         value = expNode->right->evaluateInteger(symbolTable, expNode->right);
         s = expNode->left->evaluateString(symbolTable, expNode->left);
     }
-    expNode->cvalue = realloc(expNode->cvalue, strlen(s) * value + 1);
+    char* aux = realloc(expNode->cvalue, strlen(s) * value + 1);
+    if(aux == NULL){
+        outOfMemory(state.errorManager);
+        return expNode->cvalue;
+    }else{
+        expNode->cvalue = aux;
+    }
 
     int i = 0;
     for (int j = 0; j < value; ++j) {
@@ -226,6 +259,10 @@ int returnIntegerVariable(SymbolTable* symbolTable, ExpNode* expNode) {
 ExpNode* VariableSubscriptExpAction(char* varName, int index) {
     printf("VariableSubscriptExpAction(%s[%d]) \n", varName, index);
     char* cvalue = malloc(strlen(varName) + 8);
+    if(cvalue == NULL){
+        outOfMemory(state.errorManager);
+        return NULL;
+    }
     sprintf(cvalue, "%s[%d]", varName, index);
     printf("%s", cvalue);
     return newExpNode(&varMode, &returnIntegerVariable, &returnStringVariable, index, cvalue, NULL, NULL);
@@ -234,6 +271,10 @@ ExpNode* VariableSubscriptExpAction(char* varName, int index) {
 ExpNode* VariableExpAction(char* varName) {
     printf("VariableExpAction(%s) \n", varName);
     char* cvalue = malloc(strlen(varName) + 1);
+    if(cvalue == NULL){
+        outOfMemory(state.errorManager);
+        return NULL;
+    }
     strcpy(cvalue, varName);
     return newExpNode(&varMode, &returnIntegerVariable, &returnStringVariable, -1, cvalue, NULL, NULL);
 }
@@ -265,6 +306,10 @@ char* returnString(SymbolTable* symbolTable, struct ExpResultNode* expNode) {
 
 ExpResultNode* StringConstantExpAction(char* string) {
     char* cvalue = malloc(strlen(string) + 1);
+    if(cvalue == NULL){
+        outOfMemory(state.errorManager);
+        return NULL;
+    }
     strcpy(cvalue, string);
     return newExpResultNode(&returnString, cvalue, NULL);
 }

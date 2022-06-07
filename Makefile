@@ -15,7 +15,7 @@ parser:
 	lex $(SRC_FOLDER)/lang.l
 	yacc -d $(SRC_FOLDER)/lang.y
 	$(CC) $(CCFLAGS) $(SOURCES_C) lex.yy.c y.tab.c $(YLFLAGS) -o jtoh
-	rm -rf $(OBJ)
+	rm -rf lex.yy.c y.tab.c
 
 #%.o:%.c
 #	$(CC) $(CCFLAGS) $(YLFLAGS) -c $< -o $@
@@ -38,5 +38,12 @@ uninstall: clean
 check:
 	mkdir check
 	cppcheck --quiet --enable=all --force --inconclusive . 2> ./check/cppout.txt
+
+	pvs-studio-analyzer trace -- make
+	pvs-studio-analyzer analyze	
+	plog-converter -a '64:1,2,3;GA:1,2,3;OP:1,2,3' -t tasklist -o ./check/report.tasks ./PVS-Studio.log 
+	
+	mv strace_out check
+	rm PVS-Studio.log
 
 PHONY = all clean check

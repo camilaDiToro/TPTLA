@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include "include/jsonToAst.h"
 
 
@@ -22,6 +25,11 @@ ReadNode * NewNodeJsonReadAction(char * varName, GenericNode * content){
         return outOfMemory(state.errorManager);
     }
     newNode->varName = malloc(strlen(varName) +1);
+    if(newNode->varName == NULL){
+        free(newNode);
+        outOfMemory(state.errorManager);
+        return NULL;
+    }
     strcpy(newNode->varName, varName);
     newNode->content = content;
 	return newNode;
@@ -36,6 +44,11 @@ ForInRangeNode * NewNodeJsonForInRangeAction(StartEndWrapperNode * startEndWrapp
 
     if (varName != NULL) {
         newNode->varName = malloc(strlen(varName) +1);
+        if(newNode->varName == NULL){
+            free(newNode);
+            outOfMemory(state.errorManager);
+            return NULL;
+        }   
         strcpy(newNode->varName, varName);
     }
 
@@ -61,6 +74,11 @@ ForListNode * NewNodeJsonForListAction(ArrayNode * arrayNode, char * varName, Ge
     }
 
     newNode->varName = malloc(strlen(varName) +1);
+    if(newNode->varName == NULL){
+        free(newNode);
+        outOfMemory(state.errorManager);
+        return NULL;
+    }
     strcpy(newNode->varName, varName);
     newNode->content = content;
     newNode->list = arrayNode; 

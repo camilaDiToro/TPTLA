@@ -1,3 +1,6 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+
 #include "include/expToAst.h"
 
 extern ExpNode* newExpNode(getModeFunction gm, evaluateIntegerFunction ei, evaluateStringFunction es, int ivalue, char* cvalue, ExpNode* left, ExpNode* right);
@@ -24,7 +27,13 @@ static booleanFunction booleanFunctions[] = {
 char* compareStrings(SymbolTable* symbolTable, ExpNode* expNode) {
     char* left = expNode->left->evaluateString(symbolTable, expNode->left);
     char* right = expNode->right->evaluateString(symbolTable, expNode->right);
-    expNode->cvalue = realloc(expNode->cvalue, 2);
+    char* aux = realloc(expNode->cvalue, 2);
+    if(aux == NULL){
+        outOfMemory(state.errorManager);
+        return expNode->cvalue;
+    }else{
+       expNode->cvalue = aux;
+    }
     expNode->cvalue[1] = 0;
     booleanFunction fun = booleanFunctions[expNode->ivalue];
     if (fun(strcmp(left, right), 0)) {
