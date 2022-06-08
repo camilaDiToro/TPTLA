@@ -21,7 +21,7 @@
             "@type": "table", 
             "@content": {
                 "@type": "@for", 
-                "@inrange": ["1","10"], 
+                "@inrange": ["${1}","${10}"], 
                 "@content": {
                     "@type": "tr", 
                     "@content": {

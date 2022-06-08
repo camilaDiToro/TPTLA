@@ -129,6 +129,7 @@ static void forInRangeToHTML(SymbolTable* table, ForInRangeNode* node, int align
             entry->value = itoa(i);
             genericToHTML(table, node->content, align);
         }
+        free(entry->value);
     } else {
         for (int i = start; i < end; i++) {
             genericToHTML(table, node->content, align);

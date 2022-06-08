@@ -1,0 +1,1 @@
+../../jtoh EX07-entrada-estandar.json
