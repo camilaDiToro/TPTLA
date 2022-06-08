@@ -1,0 +1,40 @@
+{
+    "@type":"html",
+    "@content": [
+        {
+            "@type": "head",
+            "@content": {
+                "@type": "title",
+                "@content": "Arithmetic Operations"     
+            }
+        },
+        {
+            "@type": "body",
+            "@content": [
+                {
+                    "@type" : "sum",
+                    "@content" : "2 + 3 = ${2 + 3}"
+                },
+                {
+                    "@type" : "sub",
+                    "@content" : "8 - 5 = ${8 - 5}"
+                },
+                {
+                    "@type" : "mult",
+                    "@content" : "2 * 6 = ${2 * 6}"
+                },
+                {
+                    "@type" : "div",
+                    "@content" : "12 / 3 = ${12 / 3}"
+                },
+                {
+                    "@type" : "all",
+                    "@content" : "5 * 2 + 6 / 3 - 1"
+                }
+            ]
+        }
+    ]
+}
+
+
+

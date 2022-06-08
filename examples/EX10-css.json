@@ -1,0 +1,20 @@
+{
+    "@type": "html", 
+    "@content": {
+        "@type": "body",
+        "style": "background-color:black;", 
+        "@content": [
+            {
+                "@type": "h1", 
+                "style": "color:white;padding:30px;",
+                "@content": "MyTitle"
+            }, 
+            {
+                "@type": "p",
+                "style": "MyTitle",
+                "@content": "Hello."
+            }
+        ] 
+
+    }
+}

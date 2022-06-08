@@ -77,8 +77,8 @@ static void printAlignment(int align){
 }
 
 static void stringToHTML(SymbolTable* table, StringNode* node, int align) {
+    printAlignment(align);
     while (node != NULL) {
-        printAlignment(align);
         P("%s", node->exp->evaluate(table, node->exp));
         node = node->next;
     }

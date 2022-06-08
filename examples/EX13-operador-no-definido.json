@@ -1,0 +1,25 @@
+{
+    "@type":"html",
+    "@content": [
+        {
+            "@type": "head",
+            "@content": {
+                "@type": "title",
+                "@content": "Arithmetic Operations"     
+            }
+        },
+        {
+            "@type": "body",
+            "@content": [
+                {
+                    "@type" : "Mod",
+                    "@content" : "2 % 3 = ${2 % 3}"
+                },
+                {
+                    "@type" : "Inc",
+                    "@content" : "8++ = ${8++}"
+                }
+            ]
+        }
+    ]
+}

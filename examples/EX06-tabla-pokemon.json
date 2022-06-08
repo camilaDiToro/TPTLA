@@ -1,0 +1,39 @@
+{
+    "@type": "body", 
+    "@content": [
+        {
+            "@type": "h3", 
+            "@content": "No puedo poner comentarios en JSON pero para hacer esta lista se debe"
+        }, 
+        {
+            "@type": "h6", 
+            "@content": "Instalar el comando jq usando \"sudo apt install jq\" "
+        },
+        {
+            "@type": "h3", 
+            "@content": "Correr el siguiente comando y pipearlo con el ejecutable generado en compilacion"
+        }, 
+        {
+            "@type": "p", 
+            "@content": "for i in {1..10}; do curl --location --request GET https://pokeapi.co/api/v2/pokemon/\\$i | jq -r '.name' >> pkmn ; done; cat pkmn; rm pkmn"
+        },
+        {
+            "@type": "table", 
+            "@content": {
+                "@type": "@for", 
+                "@inrange": ["1","10"], 
+                "@content": {
+                    "@type": "tr", 
+                    "@content": {
+                        "@type": "@read",
+                        "@var": "pokemon", 
+                        "@content": {
+                            "@type": "h6", 
+                            "@content": "${pokemon}"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

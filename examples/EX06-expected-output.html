@@ -1,0 +1,18 @@
+<body>
+    <h3>No puedo poner comentarios en JSON pero para hacer esta lista se debe</h3> 
+    <h6>Instalar el comando jq usando "sudo apt install jq"</h6> 
+    <h3>Correr el siguiente comando y pipearlo con el ejecutable generado en compilación</h3>
+    <p>for i in {1..10}; do curl --location --request GET https://pokeapi.co/api/v2/pokemon/$i | jq -r '.name' >> pkmn ; done; cat pkmn; rm pkmn</p>
+    <table>
+        <tr>bulbasaur<tr>
+        <tr>ivysaur</tr>
+        <tr>venusaur</tr>
+        <tr>charmander</tr>
+        <tr>charmeleon</tr>
+        <tr>charizard</tr>
+        <tr>squirtle</tr>
+        <tr>wartortle</tr>
+        <tr>blastoise</tr>
+        <tr>caterpie</tr>
+    </table> 
+</body>

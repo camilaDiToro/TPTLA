@@ -1,0 +1,26 @@
+{
+    "@type":"html",
+    "@content": [
+        {
+            "@type": "head",
+            "@content": {
+                "@type": "title",
+                "@content": "Empty Jsons"     
+            }
+        },
+        {
+            "@type" : "body",
+            "@content" : [
+                {
+                    "@type" : "div",
+                    "@content" : {
+
+                    }
+                },
+                {
+
+                }
+            ]
+        }
+    ]
+}

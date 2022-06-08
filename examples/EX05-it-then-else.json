@@ -1,0 +1,15 @@
+{
+    "@type": "body",
+    "@content": {
+            "@type": "@if", 
+            "@condition": "${ argv[0] == argv[1] }", 
+            "@then": {
+                "@type": "h1",
+                "@content": "This text is being shown because both arguments are equal"
+            }, 
+            "@else": {
+                "@type": "h2", 
+                "@content": "This text is being shown because arguments are not equal"
+        }
+    }
+}

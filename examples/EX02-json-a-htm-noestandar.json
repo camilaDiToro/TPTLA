@@ -1,0 +1,26 @@
+{
+    "@type":"html",
+    "@content": [
+        {
+            "@type": "head",
+            "@content": {
+                "@type": "title",
+                "@content": "Lists"     
+            }
+        },
+        {
+            "@type": "body",
+            "@content": {
+                "@type": "@for",
+                "@var": "music",
+                "@in": ["Pop", "Cumbia", "RKT"],
+                "@content": {
+                    "@type": "@for", 
+                    "@var": "i", 
+                    "@inrange": ["${1}","${2}"],
+                    "@content": "${ music + i}"
+                }
+            }
+        }
+    ]
+}

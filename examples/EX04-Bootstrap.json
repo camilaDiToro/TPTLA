@@ -1,0 +1,37 @@
+[{
+    "@type":"div",
+    "class":"mb-3",
+    "@content":[
+        {
+            "@type":"label",
+            "for":"exampleControlInput1",
+            "class":"form-label",
+            "@content":"EmailAddress"
+        },{
+            "@type":"input",
+            "type":"email",
+            "class":"form-control",
+            "id":"exampleFormControlInput1",
+            "placeholder":"name@example.com",
+            "@content":""
+        }
+    ]
+},
+{
+    "@type":"div",
+    "class":"mb-3",
+    "@content":[
+        {
+            "@type":"label",
+            "for":"exampleFormControlTextarea1",
+            "class":"form-label",
+            "@content":"Example textarea"
+        },{
+            "@type":"textarea",
+            "class":"form-control",
+            "id":"exampleFormControlTextarea1",
+            "rows":"3",
+            "@content":""
+        }
+    ]
+}]

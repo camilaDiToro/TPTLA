@@ -1,0 +1,15 @@
+{
+    "@type": "h1",
+    "@content": {
+            "@type": "@if", 
+            "@condition": "${ argc > 1 }", 
+            "@then": {
+                "@type": "h1",
+                "@content": "This text is the content of the first argument ${argv[0]}"
+            }, 
+            "@else": {
+                "@type": "h2", 
+                "@content": "There are no arguments"
+        }
+    }
+}

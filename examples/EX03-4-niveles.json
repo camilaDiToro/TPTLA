@@ -1,0 +1,55 @@
+{
+    "@type":"html",
+    "@content": [
+        {
+            "@type": "head",
+            "@content": {
+                "@type": "title",
+                "@content": "Your Title Here"     
+            }
+        },
+        {
+            "@type": "body",
+            "BGCOLOR":"FFFFFF",
+            "@content": [
+                {
+                    "@type":"center",
+                    "@content": {
+                        "@type":"img",
+                        "src":"clouds.jpg",
+                        "align": "BOTTOM",
+                        "@content":""
+                    }
+                },{
+                    "@type":"hr",
+                    "@content":[
+                        "Send me mail at",
+                        {
+                            "@type":"a",
+                            "href":"mailto:support@yourcompany.com",
+                            "@content":"support@yourcompany.com"
+                        },
+                        {
+                            "@type":"p",
+                            "@content":{
+                                "@type":"b",
+                                "@content":"This is a new paragraph!"
+                            }
+                        },
+                        {
+                            "@type":"br",
+                            "@content":""
+                        },
+                        {
+                            "@type":"b",
+                            "@content":{
+                                "@type":"i",
+                                "@content":"This is a new sentence without a paragraph break, in bold italics."
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
