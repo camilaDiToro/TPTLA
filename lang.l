@@ -75,7 +75,7 @@ whitespace		    [ \f\n\r\t\v]
 
 <MATH>{digit}+								    { yylval.integer = atoi(yytext); return INTEGER; }
 
-<STRING>({character}|{whitespace})+             { printf("c: %s \n", yytext); strcpy(yylval.basic_string,yytext); return CHARS; }
+<STRING>({character}|{whitespace})+             { strcpy(yylval.basic_string,yytext); return CHARS; }
 
 <STRING>"\\\\$"                                 { strcpy(yylval.basic_string,"$"); return CHARS; }
 <STRING>"\\\""                                  { strcpy(yylval.basic_string,"\""); return CHARS; }

@@ -150,7 +150,6 @@ char* concatStrigns(SymbolTable* symbolTable, ExpNode* expNode) {
 }
 
 ExpNode* AdditionExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
-    printf("AdditionExpressionExpAction \n");
     return newExpNode(&orMode, &addIntegers, &concatStrigns, -1, NULL, exp1, exp2);
 }
 
@@ -159,7 +158,6 @@ int subIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
 }
 
 ExpNode* SubtractionExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
-    printf("SubtractionExpressionExpAction \n");
     return newExpNode(&justIntegerMode, &subIntegers, NULL, -1, NULL, exp1, exp2);
 }
 
@@ -196,7 +194,6 @@ int mulIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
 }
 
 ExpNode* MultiplicationExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
-    printf("MultiplicationExpressionExpAction \n");
     return newExpNode(&notTwoStringsMode, &mulIntegers, &mulStringInt, -1, NULL, exp1, exp2);
 }
 
@@ -210,7 +207,6 @@ int divIntegers(SymbolTable* symbolTable, ExpNode* expNode) {
 }
 
 ExpNode* DivisionExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
-    printf("DivisionExpressionExpAction \n");
     return newExpNode(&justIntegerMode, &divIntegers, NULL, -1, NULL, exp1, exp2);
 }
 
@@ -219,17 +215,14 @@ ExpNode* DivisionExpressionExpAction(ExpNode* exp1, ExpNode* exp2) {
 **************************************************************************************/
 
 ExpNode* FactorExpressionExpAction(ExpNode* factor) {
-    printf("FactorExpressionExpAction \n");
     return factor;
 }
 
 ExpNode* ConstantFactorExpAction(ExpNode* expNode) {
-    printf("ConstantFactorExpAction() \n");
     return expNode;
 }
 
 ExpNode* VariableFactorExpAction(ExpNode* expNode) {
-    printf("VariableFactorGrammarAction() \n");
     return expNode;
 }
 
@@ -257,19 +250,16 @@ int returnIntegerVariable(SymbolTable* symbolTable, ExpNode* expNode) {
 }
 
 ExpNode* VariableSubscriptExpAction(char* varName, int index) {
-    printf("VariableSubscriptExpAction(%s[%d]) \n", varName, index);
     char* cvalue = malloc(strlen(varName) + 8);
     if(cvalue == NULL){
         outOfMemory(state.errorManager);
         return NULL;
     }
     sprintf(cvalue, "%s[%d]", varName, index);
-    printf("%s", cvalue);
     return newExpNode(&varMode, &returnIntegerVariable, &returnStringVariable, index, cvalue, NULL, NULL);
 }
 
 ExpNode* VariableExpAction(char* varName) {
-    printf("VariableExpAction(%s) \n", varName);
     char* cvalue = malloc(strlen(varName) + 1);
     if(cvalue == NULL){
         outOfMemory(state.errorManager);
@@ -296,7 +286,6 @@ char* returnIntegerAsString(SymbolTable* symbolTable, ExpNode* expNode) {
 }
 
 ExpNode* IntegerConstantExpAction(const int value) {
-    printf("IntegerConstantGrammarAction(%d) \n", value);
     return newExpNode(&integerMode, &returnIntegerValue, &returnIntegerAsString, value, NULL, NULL, NULL);
 }
 

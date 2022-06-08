@@ -186,7 +186,6 @@ static builderFunction buiders[] = {
 
 static void genericToHTML(SymbolTable* table, GenericNode* node, int align) {
     table = newScope(table);
-    printf("genericToHTML %d\n", node->nodeType);
     builderFunction builder = buiders[node->nodeType];
     builder(table, node->node, align+1);
     deleteScope(table);

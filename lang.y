@@ -102,109 +102,109 @@ extern FILE * out;
 
 %%
 
-program: json																		{ printf("ProgramGenericAction\n"); $$ = ProgramGenericAction($1);}
+program: json																		{ $$ = ProgramGenericAction($1);}
 	; 						
 
-json: string																		{ printf("NewNodeGenericAction\n"); $$ = NewNodeGenericAction((void*)$1, STRING_NODE); }
-    | array																			{ printf("JSON TYPE: Array\n"); 	$$ = NewNodeGenericAction((void*)$1, ARRAY_NODE);}
-	| json_if																		{ printf("JSON TYPE: If\n"); 		$$ = NewNodeGenericAction((void*)$1, JSON_IF_NODE);}
-	| json_read																		{ printf("JSON TYPE: Read\n"); 		$$ = NewNodeGenericAction((void*)$1, JSON_READ_NODE);}
-	| json_for_in_range																{ printf("JSON TYPE: ForInRange\n");$$ = NewNodeGenericAction((void*)$1, JSON_FOR_IN_RANGE_NODE); }
-	| json_for_list																	{ printf("JSON TYPE: ForList\n");   $$ = NewNodeGenericAction((void*)$1, JSON_FOR_LIST_NODE);}
-	| json_common										        					{ printf("JSON TYPE: Common\n"); 	$$ = NewNodeGenericAction((void*)$1, JSON_COMMON_NODE);}
+json: string																		{ $$ = NewNodeGenericAction((void*)$1, STRING_NODE); }
+    | array																			{ $$ = NewNodeGenericAction((void*)$1, ARRAY_NODE);}
+	| json_if																		{ $$ = NewNodeGenericAction((void*)$1, JSON_IF_NODE);}
+	| json_read																		{ $$ = NewNodeGenericAction((void*)$1, JSON_READ_NODE);}
+	| json_for_in_range																{ $$ = NewNodeGenericAction((void*)$1, JSON_FOR_IN_RANGE_NODE); }
+	| json_for_list																	{ $$ = NewNodeGenericAction((void*)$1, JSON_FOR_LIST_NODE);}
+	| json_common										        					{ $$ = NewNodeGenericAction((void*)$1, JSON_COMMON_NODE);}
 	;
 
-json_if: OPEN_CURL json_if_body	CLOSE_CURL											{ printf("JSON IF THEN \n"); 		$$ = $2;}
-	|	 OPEN_CURL json_if_body COM row_else CLOSE_CURL								{ printf("JSON IF ELSE \n"); 		$$ = AddElseJsonIfAction($2, $4);}
+json_if: OPEN_CURL json_if_body	CLOSE_CURL											{ $$ = $2;}
+	|	 OPEN_CURL json_if_body COM row_else CLOSE_CURL								{ $$ = AddElseJsonIfAction($2, $4);}
 	;
 
-json_if_body: row_type_if COM row_condition COM row_then        					{ printf("JSON IF BODY\n"); 		$$ = NewNodeJsonIfAction($3, $5);}
+json_if_body: row_type_if COM row_condition COM row_then        					{ $$ = NewNodeJsonIfAction($3, $5);}
 	;
 
-json_read: OPEN_CURL json_read_body CLOSE_CURL										{ printf("JSON TYPE: Read\n");      $$ = $2;}
+json_read: OPEN_CURL json_read_body CLOSE_CURL										{ $$ = $2;}
 	;
 
-json_read_body: row_type_read COM row_var COM row_content							{ printf("JSON READ BODY\n"); 		$$ = NewNodeJsonReadAction($3, $5);}
+json_read_body: row_type_read COM row_var COM row_content							{ $$ = NewNodeJsonReadAction($3, $5);}
 	;
 
-json_for_in_range: OPEN_CURL json_for_in_range_body CLOSE_CURL        				{ printf("JSON TYPE: ForInRange\n");  $$ = $2;}
+json_for_in_range: OPEN_CURL json_for_in_range_body CLOSE_CURL        				{ $$ = $2;}
 	;
 
-json_for_in_range_body: row_type_for COM row_var COM row_inrange COM row_content	{ printf("JSON FOR VAR INRANGE BODY\n"); $$ = NewNodeJsonForInRangeAction($5, $3, $7); }
-	|	row_type_for COM row_inrange COM row_content								{ printf("JSON FOR INRANGE BODY\n"); $$ = NewNodeJsonForInRangeAction($3, NULL, $5);}
+json_for_in_range_body: row_type_for COM row_var COM row_inrange COM row_content	{ $$ = NewNodeJsonForInRangeAction($5, $3, $7); }
+	|	row_type_for COM row_inrange COM row_content								{ $$ = NewNodeJsonForInRangeAction($3, NULL, $5);}
 	;
 
 json_for_list: 	OPEN_CURL row_type_for COM 
-				row_var COM row_in COM row_content CLOSE_CURL  						{ printf("JSON FOR LIST\n"); 		$$ = NewNodeJsonForListAction($6, $4, $8);  }
+				row_var COM row_in COM row_content CLOSE_CURL  						{ $$ = NewNodeJsonForListAction($6, $4, $8);  }
 	;
 
-json_common: 	OPEN_CURL row_type json_common_body row_content CLOSE_CURL 			{ printf("JSON TYPE: Generic\n"); 	$$ = NewNodeJsonCommonAction($2,$3,$4);}		
+json_common: 	OPEN_CURL row_type json_common_body row_content CLOSE_CURL 			{ $$ = NewNodeJsonCommonAction($2,$3,$4);}		
 	;
 
-json_common_body: COM																{ printf("JSON ROW EMPTY\n"); 					$$ = NULL;}
-	|	COM string TPOINTS string json_common_body									{ printf("JSON ROW ENUMERATION\n"); 				$$ = newAttributeNode($2,$4,$5);}
+json_common_body: COM																{ $$ = NULL;}
+	|	COM string TPOINTS string json_common_body									{ $$ = newAttributeNode($2,$4,$5);}
 	; 
 
 /*************************************************************************************************************
 **                                            TIPOS DE FILAS (ROWs)
 *************************************************************************************************************/
-row_type_if: TAG_TYPE TPOINTS TAG_IF							{ printf("JSON TYPE IF ROW\n"); }
+row_type_if: TAG_TYPE TPOINTS TAG_IF							{  }
 	;
 
-row_type_for: TAG_TYPE TPOINTS TAG_FOR							{ printf("JSON TYPE ROW FOR DETECTED\n"); }
+row_type_for: TAG_TYPE TPOINTS TAG_FOR							{  }
 	;
 
-row_type_read: TAG_TYPE TPOINTS TAG_READ						{ printf("JSON TYPE ROW FOR \n"); }
+row_type_read: TAG_TYPE TPOINTS TAG_READ						{  }
 	;
 
-row_type: TAG_TYPE TPOINTS string								{ printf("JSON TYPE ROW DETECTED \n"); 	$$ = $3;}				
+row_type: TAG_TYPE TPOINTS string								{ $$ = $3;}				
 	;
 
-row_condition: TAG_CONDITION TPOINTS string						{ printf("JSON CONDITION ROW\n"); 		$$ = $3;}
+row_condition: TAG_CONDITION TPOINTS string						{ $$ = $3;}
 	;
 
-row_then: TAG_THEN TPOINTS json									{ printf("JSON THEN ROW\n"); 			$$ = $3;}
+row_then: TAG_THEN TPOINTS json									{ $$ = $3;}
 	;
 
-row_else: TAG_ELSE TPOINTS json									{ printf("JSON ELSE ROW\n"); 			$$ = $3;}
+row_else: TAG_ELSE TPOINTS json									{ $$ = $3;}
 	;
 
-row_var: TAG_VAR TPOINTS QUOTE CHARS QUOTE						{ printf("JSON VAR ROW \n"); 			strcpy($$,$4);}
+row_var: TAG_VAR TPOINTS QUOTE CHARS QUOTE						{ strcpy($$,$4);}
 	;
 
-row_content: TAG_CONTENT TPOINTS json							{ printf("JSON CONTENT ROW \n"); 		$$ = $3;}
+row_content: TAG_CONTENT TPOINTS json							{ $$ = $3;}
 	;
 
 row_inrange: 	TAG_INRANGE TPOINTS OPEN_BRA QUOTE 
 				expression_result QUOTE COM QUOTE 
-				expression_result QUOTE CLOSE_BRA 				{ printf("JSON INRANGE ROW DETECTED\n");  $$ = NewStartEndWrapperNode($5, $9);}
+				expression_result QUOTE CLOSE_BRA 				{ $$ = NewStartEndWrapperNode($5, $9);}
 
-row_in: TAG_IN TPOINTS array									{ printf("JSON IN ROW DETECTED\n"); 	$$ = $3; }
+row_in: TAG_IN TPOINTS array									{ $$ = $3; }
 	;
 
 /*************************************************************************************************************
 **                                         TIPOS BASICOS - STRING Y ARRAY
 **************************************************************************************************************/
 
-array: OPEN_BRA array_body CLOSE_BRA							{ printf("NON EMPTY ARRAY\n"); 		$$ = ArrayAction($2);}
-	|  OPEN_BRA CLOSE_BRA										{ printf("EMPTY ARRAY\n"); 			$$ = EmptyArrayAction();}
+array: OPEN_BRA array_body CLOSE_BRA							{ $$ = ArrayAction($2);}
+	|  OPEN_BRA CLOSE_BRA										{ $$ = EmptyArrayAction();}
 	;
 
-array_body: json                                          		{ printf("body array\n"); 			$$ = NewNodeArrayAction($1, NULL);}
-	| json COM array_body                                       { printf("body array concat\n"); 	$$ = NewNodeArrayAction($1, $3);}
+array_body: json                                          		{ $$ = NewNodeArrayAction($1, NULL);}
+	| json COM array_body                                       { $$ = NewNodeArrayAction($1, $3);}
 	;
 
-string: QUOTE string_body QUOTE 								{ printf("StringAction\n");			$$ = StringAction($2); }
-	| QUOTE QUOTE												{ printf("EmptyStringAction\n"); 	$$ = EmptyStringAction(); }
+string: QUOTE string_body QUOTE 								{ $$ = StringAction($2); }
+	| QUOTE QUOTE												{ $$ = EmptyStringAction(); }
 	;
 
-string_body: string_constant									{ printf("NewNodeStringAction\n"); 	$$ = NewNodeStringAction($1, NULL); }
-	| expression_result											{ printf("NewNodeStringAction\n"); 	$$ = NewNodeStringAction($1, NULL); }
-	| string_constant string_body 								{ printf("NewNodeStringAction\n"); 	$$ = NewNodeStringAction($1, $2); }
-	| expression_result string_body 							{ printf("NewNodeStringAction\n"); 	$$ = NewNodeStringAction($1, $2); }
+string_body: string_constant									{ $$ = NewNodeStringAction($1, NULL); }
+	| expression_result											{ $$ = NewNodeStringAction($1, NULL); }
+	| string_constant string_body 								{ $$ = NewNodeStringAction($1, $2); }
+	| expression_result string_body 							{ $$ = NewNodeStringAction($1, $2); }
 	;
 
-string_constant: CHARS                                          { printf("StringConstantExpAction %s\n", $1); $$ = StringConstantExpAction($1); }
+string_constant: CHARS                                          { $$ = StringConstantExpAction($1); }
 	;
 
 /************************************************************************************************************
