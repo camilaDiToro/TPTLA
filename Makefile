@@ -1,6 +1,6 @@
-CCFLAGS = -Wall -Wno-unused-function -std=c99 -g -Wdiv-by-zero -fsanitize=address 
+CCFLAGS = -Wall -Wno-unused-function -std=c99 -g -Wdiv-by-zero
+YACCFLAGS = -Wall -Wconflicts-sr -Weverything -d
 YLFLAGS = -lfl
-MACYLFLAGS = -ll
 SRC_FOLDER = .
 SOURCES_C=$(wildcard $(SRC_FOLDER)/*.c)
 SOURCES_OBJ=$(SOURCES_C:%.c:%.o)
@@ -13,12 +13,10 @@ INSTALL_PATH = ~/.jtoh
 all: parser
 parser:
 	lex $(SRC_FOLDER)/lang.l
-	yacc -d $(SRC_FOLDER)/lang.y
+	yacc $(YACCFLAGS)  $(SRC_FOLDER)/lang.y
 	$(CC) $(CCFLAGS) $(SOURCES_C) lex.yy.c y.tab.c $(YLFLAGS) -o jtoh
 	rm -rf lex.yy.c y.tab.c
 
-#%.o:%.c
-#	$(CC) $(CCFLAGS) $(YLFLAGS) -c $< -o $@
 
 clean: 
 	rm -rf $(PARSER_OBJ) $(PROGRAM_OBJ) $(OBJ) jtoh
