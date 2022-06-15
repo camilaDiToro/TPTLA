@@ -23,7 +23,7 @@
             ./EX$1.sh
             mv out.html ../../
     else
-        echo "The example number must be between 1 and 16."
+        echo "The example number must be between 1 and 18."
     fi
  else
      echo "The number of example to compile must be provided. \n"
