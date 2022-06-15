@@ -17,7 +17,7 @@
         then 
             cd ./EX$1
             ./EX$1.sh
-    elif [ "$1" -ge "15" ] && [ "$1" -le "19" ]
+    elif [ "$1" -ge "15" ] && [ "$1" -le "18" ]
         then 
             cd ./EX$1
             ./EX$1.sh

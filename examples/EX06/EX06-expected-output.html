@@ -1,18 +1,40 @@
-<body>
-    <h3>No puedo poner comentarios en JSON pero para hacer esta lista se debe</h3> 
-    <h6>Instalar el comando jq usando "sudo apt install jq"</h6> 
-    <h3>Correr el siguiente comando y pipearlo con el ejecutable generado en compilación</h3>
-    <p>for i in {1..10}; do curl --location --request GET https://pokeapi.co/api/v2/pokemon/$i | jq -r '.name' >> pkmn ; done; cat pkmn; rm pkmn</p>
-    <table>
-        <tr>bulbasaur<tr>
-        <tr>ivysaur</tr>
-        <tr>venusaur</tr>
-        <tr>charmander</tr>
-        <tr>charmeleon</tr>
-        <tr>charizard</tr>
-        <tr>squirtle</tr>
-        <tr>wartortle</tr>
-        <tr>blastoise</tr>
-        <tr>caterpie</tr>
-    </table> 
-</body>
+<!DOCTYPE html>
+  <head>
+        <script src="https://cdn.tailwindcss.com" >
+            
+        </script>
+  </head>
+  <html>
+        <body class="bg-red-100 p-20" >
+              <div class="shadow-xl w-full h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start" >
+                  <h1 class="text-center text-4xl font-semibold font-sans text-polar" >
+                      Less than 5 dad jokes for TLA
+                  </h1>
+              </div>
+              <div class="w-full flex flex-wrap px-20 justify-center" >
+                    <div class="shadow-xl w-1/3 hover:bg-gray-200 h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start mx-4" >
+                              <div class="w-full mb-2 font-sans" >
+                                  TRENDY JOKE!
+                              </div>
+                              <div class="text-center text-xl font-semibold font-sans" >
+                                  I saw an ad in a shop window, "Television for sale, $1, volume stuck on full", I thought, "I can't turn that down".
+                              </div>
+                    </div>
+                    <div class="shadow-xl w-1/3 hover:bg-gray-200 h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start mx-4" >
+                            <h2 class="text-center text-xl font-semibold font-sans" >
+                                I used to hate facial hair, but then it grew on me.
+                            </h2>
+                    </div>
+                    <div class="shadow-xl w-1/3 hover:bg-gray-200 h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start mx-4" >
+                            <h2 class="text-center text-xl font-semibold font-sans" >
+                                When is a door not a door? When it's ajar.
+                            </h2>
+                    </div>
+                    <div class="shadow-xl w-1/3 hover:bg-gray-200 h-1/8 mb-4 flex flex-col rounded-lg py-10 px-4 bg-[#FAFCFF] justify-start mx-4" >
+                            <h2 class="text-center text-xl font-semibold font-sans" >
+                                My friend said to me: "What rhymes with orange" I said: "no it doesn't"
+                            </h2>
+                    </div>
+              </div>
+        </body>
+  </html>
