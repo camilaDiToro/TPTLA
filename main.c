@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 
     // Adding arguments as variables, all the arguments are considered as strings
     state.table = newEmptySymbolTable();
-    char argument[12];
+    char argument[18];
     for (int i = 0; i < argc; ++i) {
         sprintf(argument, "argv[%d]", i);
         addSymbolToTable(state.table, newSymbol(argument, argv[i], STRING));
