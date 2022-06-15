@@ -42,12 +42,12 @@ static void printError(int errorNumber, ErrorNode* node){
                                 "The operations -, /, &&, || and ! are only defined over integers. The result was \"{undefined}\" due to an invalid type."
                               };
     
-    printf("[Error %i]: %s \n", errorNumber, messages[node->type]);
+    fprintf(stderr, "\033[31m[Error %i]: %s \033[0m\n", errorNumber, messages[node->type]);
     return;
 }
 
 static void printErrorVaraible(int errorNumber, ErrorNode* node){
-    printf("[Error %i]: Undefined reference to variable \"%s\". \n", errorNumber, node->msg);
+    printf("\033[31m[Error %i]: Undefined reference to variable \"%s\". \033[0m\n", errorNumber, node->msg);
     return;
 }
 
@@ -95,7 +95,7 @@ void showErrors(ErrorManager* em){
     }
     em->errorsShown = TRUE;
     if (em->outOfMemory) {
-       printf("[Deadly error]: out of memory while trying to build de AST \n");
+       printf("\033[31m[Deadly error]: out of memory while trying to build de AST \033[0m\n");
     }
     
     ErrorNode * aux = em->first;
