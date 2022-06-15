@@ -1,1 +1,1 @@
-../../jtoh EX12-content-repetido.json
+../../jtoh EX12-repeated-content.json

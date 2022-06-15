@@ -1,1 +1,1 @@
-../../jtoh EX07-entrada-estandar.json
+../../jtoh EX07-stdin.json

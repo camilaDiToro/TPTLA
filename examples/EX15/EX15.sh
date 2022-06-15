@@ -1,1 +1,1 @@
-../../jtoh EX15-variable-inexistente.json
+../../jtoh EX15-undefined-variable.json

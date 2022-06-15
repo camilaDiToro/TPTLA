@@ -1,1 +1,1 @@
-../../jtoh EX11-sin-clave-type.json
+../../jtoh EX11-no-key-type.json

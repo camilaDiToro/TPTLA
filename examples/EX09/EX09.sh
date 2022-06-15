@@ -1,1 +1,1 @@
-../../jtoh EX09-operaciones-aritmeticas.json
+../../jtoh EX09-arithmetic-operations.json

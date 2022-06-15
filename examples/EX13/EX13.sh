@@ -1,1 +1,1 @@
-../../jtoh EX13-operador-no-definido.json
+../../jtoh EX13-undefined-operand.json
