@@ -13,4 +13,4 @@ De forma alternativa, se puede correr cualquiera de los ejemplos de la siguiente
 ```console
 foo@bar:~/TLA_TPE/$ ./run.sh i
 ```
-Donde i es un entero entre 1 y 10, y se corresponde con el numero de ejemplo. Los ejemplos 11 a 15 representa ejemplos con errores.
+Donde i es un entero entre 1 y 10, y se corresponde con el numero de ejemplo. Los ejemplos 11 a 18 representan ejemplos con errores.

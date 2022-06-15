@@ -1,0 +1,4 @@
+{
+    "@type": "body", 
+    "@content": "The result of a division by 0 is: ${5/0}"
+}

@@ -1,0 +1,25 @@
+{
+    "@type":"html",
+    "@content": [
+        {
+            "@type": "head",
+            "@content": {
+                "@type": "title",
+                "@content": "Div Align Attribute"     
+            }
+        },
+        {
+            "@type": "body",
+            "@content": {
+                "@type": "@for",
+                "@var": "align",
+                "@in": ["left"],
+                "@content": {
+                    "@type":"div",
+                    "align": "${align - align + align*align}",
+                    "@content":"I am a div and my alignment is ${align}."
+                }
+            }
+        }
+    ]
+}

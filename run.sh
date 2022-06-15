@@ -8,12 +8,12 @@
         cd ./EX0$1
         ./EX0$1.sh
         mv out.html ../../
-    elif [ "$1" -ge "10" ] && [ "$1" -le "15" ]
+    elif [ "$1" -ge "10" ] && [ "$1" -le "18" ]
         then 
             cd ./EX$1
             ./EX$1.sh
     else
-        echo "The example number must be between 1 and 15."
+        echo "The example number must be between 1 and 16."
     fi
  else
      echo "The number of example to compile must be provided. \n"
